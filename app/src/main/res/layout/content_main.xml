@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.wangyu892449346.bluetoothserver.Activity.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <TextView
+        android:id="@+id/statusLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:typeface="monospace"/>
+
+    <TableLayout
+        android:id="@+id/table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="1dp">
+
+            <TextView
+                style="@style/table_item_style"
+                android:text="ID" />
+
+            <TextView
+                style="@style/table_item_style"
+                android:text="导航角" />
+
+            <TextView
+                style="@style/table_item_style"
+                android:text="俯仰角" />
+
+            <TextView
+                style="@style/table_item_style"
+                android:text="倾斜角" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="1dp">
+
+            <TextView
+                style="@style/table_item_style"
+                android:text="速度" />
+
+            <TextView style="@style/table_item_style" />
+
+            <TextView style="@style/table_item_style" />
+
+            <TextView style="@style/table_item_style" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp">
+
+            <TextView
+                style="@style/table_item_style"
+                android:text="坡度" />
+
+            <TextView style="@style/table_item_style" />
+
+            <TextView style="@style/table_item_style" />
+
+            <TextView style="@style/table_item_style" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp">
+
+            <TextView
+                style="@style/table_item_style"
+                android:background="@color/white"
+                android:text="角度" />
+
+            <TextView style="@style/table_item_style" />
+
+            <TextView style="@style/table_item_style" />
+
+            <TextView style="@style/table_item_style" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/fab_margin"
+    android:layout_marginRight="@dimen/fab_margin"
+    android:orientation="vertical"
+    tools:context="com.example.wangyu892449346.bluetoothserver.Activity.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/setting"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/alert"
+            android:layout_width="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape"
+            android:text="@string/alert"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape"
+            android:text="@string/confirm"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <TextView
+        style="@style/setting_title"
+        android:text="@string/nav" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="14dp" />
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_12" />
+
+        <EditText
+            android:id="@+id/edit12"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_23" />
+
+        <EditText
+            android:id="@+id/edit23"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_34" />
+
+        <EditText
+            android:id="@+id/edit34"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_45" />
+
+        <EditText
+            android:id="@+id/edit45"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_56" />
+
+        <EditText
+            android:id="@+id/edit56"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_67" />
+
+        <EditText
+            android:id="@+id/edit67"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_78" />
+
+        <EditText
+            android:id="@+id/edit78"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/nav_89" />
+
+        <EditText
+            android:id="@+id/edit89"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <TextView
+        style="@style/setting_title"
+        android:text="@string/roll" />
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/roll_ud" />
+
+        <EditText
+            android:id="@+id/edit_roll"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <TextView
+        style="@style/setting_title"
+        android:text="@string/yaw" />
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/yaw_ud" />
+
+        <EditText
+            android:id="@+id/edit_yaw"
+            style="@style/setting_EditText" />
+    </LinearLayout>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="66dp" />
+</LinearLayout>
