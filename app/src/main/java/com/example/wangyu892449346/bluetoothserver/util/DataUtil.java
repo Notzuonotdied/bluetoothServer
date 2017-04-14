@@ -15,27 +15,26 @@ public class DataUtil {
     public boolean isNavOverStep(String content) {
         int num = Integer.valueOf(content);
         if (num > 90) {
-
+            return true;
         } else if (num > 80) {
-
+            return Constant.edit89Num > num / Constant.speed;
         } else if (num > 70) {
-
+            return Constant.edit78Num > num / Constant.speed;
         } else if (num > 60) {
-
+            return Constant.edit56Num > num / Constant.speed;
         } else if (num > 50) {
-
+            return Constant.edit45Num > num / Constant.speed;
         } else if (num > 40) {
-
+            return Constant.edit34Num > num / Constant.speed;
         } else if (num > 30) {
-
+            return Constant.edit23Num > num / Constant.speed;
         } else if (num > 20) {
-
+            return Constant.edit12Num > num / Constant.speed;
         } else if (num > 10) {
-
+            return true;
         }
-        return false;
+        return true;
     }
-
 
     public List<String> getList(String managers){
         List<String> ls=new ArrayList<String>();

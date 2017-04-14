@@ -15,15 +15,15 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:typeface="monospace"/>
+        android:typeface="monospace" />
 
     <TableLayout
         android:id="@+id/table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp">
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <TableRow
             android:layout_width="wrap_content"
@@ -106,4 +106,52 @@
         </TableRow>
     </TableLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/key_parameter"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/longitude" />
+
+        <EditText
+            android:id="@+id/longitude"
+            style="@style/main_edit" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/latitude" />
+
+        <EditText
+            android:id="@+id/latitude"
+            style="@style/main_edit"/>
+    </LinearLayout>
 </LinearLayout>

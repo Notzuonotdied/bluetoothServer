@@ -7,6 +7,10 @@
         android:title="设置" />
 
     <item
+        android:id="@+id/gps"
+        android:title="开启GPS"
+        android:icon="@drawable/ic_menu_share"/>
+    <item
         android:id="@+id/connect"
         android:icon="@drawable/ic_menu_send"
         android:title="@string/action_connect"/>

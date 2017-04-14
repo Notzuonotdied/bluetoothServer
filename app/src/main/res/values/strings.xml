@@ -25,4 +25,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_connect">连接设备</string>
+    <string name="key_parameter">关键参数显示</string>
+    <string name="longitude">经度：</string>
+    <string name="latitude">纬度：</string>
 </resources>

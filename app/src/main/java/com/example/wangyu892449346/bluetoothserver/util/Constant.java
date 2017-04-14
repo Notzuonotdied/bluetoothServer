@@ -53,4 +53,6 @@ public class Constant {
     public static int edit89Num = 15;
     public static int editRollNum = 45;
     public static int editYawNum = 30;
+
+    public static int speed = 0;
 }

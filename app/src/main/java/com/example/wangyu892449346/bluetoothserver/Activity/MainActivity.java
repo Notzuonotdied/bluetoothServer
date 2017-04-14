@@ -13,15 +13,16 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wangyu892449346.bluetoothserver.GPS.GPSListener;
 import com.example.wangyu892449346.bluetoothserver.R;
 
 import java.io.IOException;
@@ -29,9 +30,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends GPSActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private EditText editLatitude;
+    private EditText editLongitude;
     /*
     * 这些是从蓝牙获取的参数
     * */
@@ -63,9 +65,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.setGpsListener(gpsListener);
         initView();
         initListener();
-
         InitBluetooth();
         handler = new MyHandler();
     }
@@ -103,6 +105,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         statusLabel = (TextView) findViewById(R.id.statusLabel);
+        editLatitude = (EditText) findViewById(R.id.latitude);
+        editLongitude = ((EditText) findViewById(R.id.longitude));
     }
 
     @Override
@@ -139,6 +143,8 @@ public class MainActivity extends AppCompatActivity
             connect();// 连接获取数据
         } else if (id == R.id.btnQuit) {
             disConnect();//中断连接
+        } else if (id == R.id.gps) {
+            this.startGPS();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -251,36 +257,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //发送数据到蓝牙设备的异步任务
-    private class SendInfoTask extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            statusLabel.setText(result);
-        }
-
-        @Override
-        protected String doInBackground(String... arg0) {
-            // TODO Auto-generated method stub
-            if (btSocket == null) {
-                return "还没有创建连接";
-            }
-            if (arg0[0].length() > 0)//不是空白串
-            {
-                byte[] msgBuffer = arg0[0].getBytes();
-                try {
-                    //  将msgBuffer中的数据写到outStream对象中
-                    outStream.write(msgBuffer);
-                } catch (IOException e) {
-                    Log.e("error", "ON RESUME: Exception during write.", e);
-                    return "发送失败";
-                }
-            }
-            return "发送成功";
-        }
-
-    }
-
     //从蓝牙接收信息的线程
     private class ReceiveThread extends Thread {
         @Override
@@ -337,4 +313,16 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+    private GPSListener gpsListener = new GPSListener() {
+        @Override
+        public void setLongitudeView(double longitude) {
+            editLongitude.setText(String.valueOf(longitude));
+        }
+
+        @Override
+        public void setLatitudeView(double latitude) {
+            editLatitude.setText(String.valueOf(latitude));
+        }
+    };
 }
