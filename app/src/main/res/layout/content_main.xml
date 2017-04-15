@@ -13,9 +13,10 @@
         android:id="@+id/statusLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:gravity="center"
         android:textStyle="bold"
-        android:typeface="monospace" />
+        android:typeface="monospace"
+        android:visibility="gone" />
 
     <TableLayout
         android:id="@+id/table"
@@ -34,19 +35,30 @@
 
             <TextView
                 style="@style/table_item_style"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
                 android:text="ID" />
 
             <TextView
                 style="@style/table_item_style"
-                android:text="导航角" />
+                android:paddingBottom="2dp"
+                android:paddingTop="4dp"
+                android:text="导航角"
+                android:textSize="16sp" />
 
             <TextView
                 style="@style/table_item_style"
-                android:text="俯仰角" />
+                android:paddingBottom="2dp"
+                android:paddingTop="4dp"
+                android:text="俯仰角"
+                android:textSize="16sp" />
 
             <TextView
                 style="@style/table_item_style"
-                android:text="倾斜角" />
+                android:paddingBottom="2dp"
+                android:paddingTop="4dp"
+                android:text="倾斜角"
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -59,13 +71,21 @@
 
             <TextView
                 style="@style/table_item_style"
-                android:text="速度" />
+                android:paddingTop="2dp"
+                android:text="@string/modle_1"
+                android:textSize="16sp" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed11"
+                style="@style/table_item_style" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed12"
+                style="@style/table_item_style" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed13"
+                style="@style/table_item_style" />
         </TableRow>
 
         <TableRow
@@ -77,13 +97,21 @@
 
             <TextView
                 style="@style/table_item_style"
-                android:text="坡度" />
+                android:paddingTop="2dp"
+                android:text="@string/modle_2"
+                android:textSize="16sp" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed21"
+                style="@style/table_item_style" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed22"
+                style="@style/table_item_style" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed23"
+                style="@style/table_item_style" />
         </TableRow>
 
         <TableRow
@@ -96,13 +124,21 @@
             <TextView
                 style="@style/table_item_style"
                 android:background="@color/white"
-                android:text="角度" />
+                android:paddingTop="2dp"
+                android:text="@string/modle_3"
+                android:textSize="16sp" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed31"
+                style="@style/table_item_style" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed32"
+                style="@style/table_item_style" />
 
-            <TextView style="@style/table_item_style" />
+            <TextView
+                android:id="@+id/speed33"
+                style="@style/table_item_style" />
         </TableRow>
     </TableLayout>
 
@@ -124,34 +160,57 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="@string/key_parameter"
-            android:textSize="18sp" />
+            android:text="@string/key_parameter" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/main_linear">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:paddingBottom="5dp"
             android:text="@string/longitude" />
 
         <EditText
             android:id="@+id/longitude"
             style="@style/main_edit" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/main_linear">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:paddingBottom="5dp"
             android:text="@string/latitude" />
 
         <EditText
             android:id="@+id/latitude"
-            style="@style/main_edit"/>
+            style="@style/main_edit" />
+    </LinearLayout>
+
+
+    <LinearLayout style="@style/main_linear">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:paddingBottom="5dp"
+            android:text="@string/speed" />
+
+        <EditText
+            android:id="@+id/speed"
+            style="@style/main_edit" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:paddingBottom="5dp"
+            android:text="@string/speed_" />
     </LinearLayout>
 </LinearLayout>

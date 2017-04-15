@@ -22,7 +22,7 @@ public class SettingActivity extends AppCompatActivity {
     private android.widget.EditText edit67;
     private android.widget.EditText edit78;
     private android.widget.EditText edit89;
-    private android.widget.EditText editroll;
+    private android.widget.EditText editPitch;
     private android.widget.EditText edityaw;
     private android.widget.Button btnAlert;
     private android.widget.Button btnConfirm;
@@ -33,9 +33,11 @@ public class SettingActivity extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.alert:
                     setFlag(true);
+                    readData();
                     break;
                 case R.id.confirm:
                     setFlag(false);
+                    saveData();
                     break;
             }
         }
@@ -58,7 +60,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private void initView() {
         this.edityaw = (EditText) findViewById(R.id.edit_yaw);
-        this.editroll = (EditText) findViewById(R.id.edit_roll);
+        this.editPitch = (EditText) findViewById(R.id.edit_roll);
         this.edit89 = (EditText) findViewById(R.id.edit89);
         this.edit78 = (EditText) findViewById(R.id.edit78);
         this.edit67 = (EditText) findViewById(R.id.edit67);
@@ -81,8 +83,8 @@ public class SettingActivity extends AppCompatActivity {
         Constant.edit45Num = sp.getInt(Constant.edit45, Constant.edit45Num);
         Constant.edit56Num = sp.getInt(Constant.edit56, Constant.edit56Num);
         Constant.edit67Num = sp.getInt(Constant.edit67, Constant.edit67Num);
-        Constant.editRollNum = sp.getInt(Constant.edit78, Constant.editRollNum);
-        Constant.editYawNum = sp.getInt(Constant.edit89, Constant.editYawNum);
+        Constant.editPitchNum = sp.getInt(Constant.editPitch, Constant.editPitchNum);
+        Constant.editYawNum = sp.getInt(Constant.editYaw, Constant.editYawNum);
 
         this.edit12.setText(int2String(Constant.edit12Num));
         this.edit23.setText(int2String(Constant.edit23Num));
@@ -93,7 +95,7 @@ public class SettingActivity extends AppCompatActivity {
         this.edit78.setText(int2String(Constant.edit78Num));
         this.edit89.setText(int2String(Constant.edit89Num));
         this.edityaw.setText(int2String(Constant.editYawNum));
-        this.editroll.setText(int2String(Constant.editRollNum));
+        this.editPitch.setText(int2String(Constant.editPitchNum));
         sp.commit();
     }
 
@@ -107,7 +109,7 @@ public class SettingActivity extends AppCompatActivity {
         Constant.edit67Num = String2Int(edit67.getText().toString());
         Constant.edit78Num = String2Int(edit78.getText().toString());
         Constant.edit89Num = String2Int(edit89.getText().toString());
-        Constant.editRollNum = String2Int(editroll.getText().toString());
+        Constant.editPitchNum = String2Int(editPitch.getText().toString());
         Constant.editYawNum = String2Int(edityaw.getText().toString());
 
         sp.putInt(Constant.edit12, Constant.edit12Num);
@@ -117,7 +119,7 @@ public class SettingActivity extends AppCompatActivity {
         sp.putInt(Constant.edit67, Constant.edit67Num);
         sp.putInt(Constant.edit78, Constant.edit78Num);
         sp.putInt(Constant.edit89, Constant.edit89Num);
-        sp.putInt(Constant.editRoll, Constant.editRollNum);
+        sp.putInt(Constant.editPitch, Constant.editPitchNum);
         sp.putInt(Constant.editYaw, Constant.editYawNum);
         sp.commit();
     }
@@ -131,7 +133,7 @@ public class SettingActivity extends AppCompatActivity {
         this.edit34.setEnabled(flag);
         this.edit23.setEnabled(flag);
         this.edit12.setEnabled(flag);
-        this.editroll.setEnabled(flag);
+        this.editPitch.setEnabled(flag);
         this.edityaw.setEnabled(flag);
     }
 

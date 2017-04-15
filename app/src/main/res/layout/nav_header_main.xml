@@ -17,20 +17,20 @@
         android:layout_width="77dp"
         android:layout_height="77dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/bluetooth"
+        app:srcCompat="@mipmap/icon"
         android:scaleType="fitCenter"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="蓝牙交互"
+        android:text="@string/app_name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2017年04月13日14:51:17" />
+        android:text="物联网开发实验室领沃团队出品" />
 
 </LinearLayout>

@@ -37,7 +37,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     try {
                         //通过工具类ClsUtils,调用createBond方法
                         boolean status = ClsUtils.createBond(btDevice.getClass(), btDevice);
-                        Log.e("ywq","attemp to bond:" + status);
+                        Log.e("ywq", "attemp to bond:" + status);
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -45,29 +45,29 @@ public class BluetoothReceiver extends BroadcastReceiver {
                 }
             } else
                 Log.e("error", "Is faild");
-            } else if (action.equals("android.bluetooth.device.action.PAIRING_REQUEST")) //再次得到的action，会等于PAIRING_REQUEST
-            {
-                Log.e("action2=", action);
-                if (btDevice.getName().contains("HC-05")) {
-                    Log.e("here", "OKOKOK");
+        } else if (action.equals("android.bluetooth.device.action.PAIRING_REQUEST")) //再次得到的action，会等于PAIRING_REQUEST
+        {
+            Log.e("action2=", action);
+            if (btDevice.getName().contains("HC-05")) {
+                Log.e("here", "OKOKOK");
 
-                    try {
+                try {
 
-                        //1.确认配对
-                        ClsUtils.setPairingConfirmation(btDevice.getClass(), btDevice, true);
-                        //2.终止有序广播
-                        Log.i("order...", "isOrderedBroadcast:" + isOrderedBroadcast() + ",isInitialStickyBroadcast:" + isInitialStickyBroadcast());
-                        abortBroadcast();//如果没有将广播终止，则会出现一个一闪而过的配对框。
-                        //3.调用setPin方法进行配对...
-                        boolean ret = ClsUtils.setPin(btDevice.getClass(), btDevice, pin);
+                    //1.确认配对
+                    ClsUtils.setPairingConfirmation(btDevice.getClass(), btDevice, true);
+                    //2.终止有序广播
+                    Log.i("order...", "isOrderedBroadcast:" + isOrderedBroadcast() + ",isInitialStickyBroadcast:" + isInitialStickyBroadcast());
+                    abortBroadcast();//如果没有将广播终止，则会出现一个一闪而过的配对框。
+                    //3.调用setPin方法进行配对...
+                    boolean ret = ClsUtils.setPin(btDevice.getClass(), btDevice, pin);
 
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                } else
-                    Log.e("提示信息", "这个设备不是目标蓝牙设备");
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else
+                Log.e("提示信息", "这个设备不是目标蓝牙设备");
 
-            }
         }
     }
+}

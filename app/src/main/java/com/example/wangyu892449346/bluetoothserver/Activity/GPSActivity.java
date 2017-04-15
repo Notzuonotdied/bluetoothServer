@@ -1,40 +1,41 @@
 package com.example.wangyu892449346.bluetoothserver.Activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSListener;
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSLocationListener;
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSLocationManager;
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSProviderStatus;
+import com.example.wangyu892449346.bluetoothserver.util.DataUtil;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
 
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class GPSActivity extends AppCompatActivity implements OnPermissionCallback {
-    //权限检测类
-    private PermissionHelper mPermissionHelper;
     private final static String[] MULTI_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION};
+    public DataUtil dataUtil = new DataUtil().getInstance();
+    //权限检测类
+    private PermissionHelper mPermissionHelper;
     private GPSLocationManager gpsLocationManager;
+    private GPSListener gpsListener;
+    private double latitude;
+    private double longitude;
+    private double time;
+    private boolean isFirst = true;
+
     public void setGpsListener(GPSListener gpsListener) {
         this.gpsListener = gpsListener;
     }
@@ -43,13 +44,10 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         this.gpsLocationManager = gpsLocationManager;
     }
 
-    private GPSListener gpsListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         checkPermissions();
         initData();
-        initViews();
         super.onCreate(savedInstanceState);
     }
 
@@ -60,15 +58,6 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
 
     private void initData() {
         gpsLocationManager = GPSLocationManager.getInstances(GPSActivity.this);
-    }
-
-    private void initViews() {
-//        ((Button) findViewById(R.id.btn_gps)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                gpsLocationManager.start(new MyListener());
-//            }
-//        });
     }
 
     public void startGPS() {
@@ -115,20 +104,56 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
 
     }
 
-    class MyListener implements GPSLocationListener {
+    public double getTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("ss", Locale.CHINA);
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        return Double.valueOf(formatter.format(curDate));
+    }
+
+    /**
+     * 计算两点间的距离--米
+     */
+    public double getDistance(double lat1, double lon1,
+                              double lat2, double lon2) {
+        float[] results = new float[1];
+        try {
+            Location.distanceBetween(lat1, lon1, lat2, lon2, results);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return results[0];
+    }
+
+    public int String2Int(String string) {
+        return Integer.valueOf(string);
+    }
+
+    private class MyListener implements GPSLocationListener {
 
         @Override
         public void UpdateLocation(Location location) {
             if (location != null) {
                 gpsListener.setLatitudeView(location.getLatitude());
                 gpsListener.setLongitudeView(location.getLongitude());
+                if (isFirst) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    time = getTime();
+                    isFirst = false;
+                }
+                gpsListener.setSpeed(getDistance(latitude, longitude, location.getLatitude(),
+                        location.getLongitude()) / (getTime() - time));
+                Log.i("速度", "time = " + time);
+                time = getTime();
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
             }
         }
 
         @Override
         public void UpdateStatus(String provider, int status, Bundle extras) {
-            if ("gps" == provider) {
-                Toast.makeText(GPSActivity.this, "定位类型：" + provider, Toast.LENGTH_SHORT).show();
+            if (TextUtils.equals("gps", provider)) {
+                //Toast.makeText(GPSActivity.this, "定位类型：" + provider, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -148,7 +173,7 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
                     Toast.makeText(GPSActivity.this, "GPS暂时不可用", Toast.LENGTH_SHORT).show();
                     break;
                 case GPSProviderStatus.GPS_AVAILABLE:
-                    Toast.makeText(GPSActivity.this, "GPS可用啦", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(GPSActivity.this, "GPS可用啦", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

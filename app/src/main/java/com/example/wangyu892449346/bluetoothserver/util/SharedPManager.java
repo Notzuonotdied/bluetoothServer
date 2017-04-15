@@ -18,11 +18,6 @@ public class SharedPManager {
         SpEditor = Sp.edit();
     }
 
-    public SharedPManager(Context context, String XML_Name) {
-        Sp = context.getSharedPreferences(XML_Name, Context.MODE_PRIVATE);
-        SpEditor = Sp.edit();
-    }
-
     /**
      * 是否包含特定key的数据
      *

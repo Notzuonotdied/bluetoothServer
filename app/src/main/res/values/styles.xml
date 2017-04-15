@@ -56,11 +56,20 @@
     </style>
 
     <style name="main_edit">
+        <item name="android:gravity">center</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:enabled">false</item>
-        <item name="android:padding">8dp</item>
+        <item name="android:text">0</item>
+    </style>
+
+    <style name="main_linear">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
     </style>
 
     <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
