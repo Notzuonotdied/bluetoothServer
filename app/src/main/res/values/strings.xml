@@ -43,4 +43,6 @@
     <string name="modle_1">模块1角度</string>
     <string name="modle_2">模块2角度</string>
     <string name="modle_3">模块3角度</string>
+
+    <string name="about_app">物联网开发实验室领沃团队出品</string>
 </resources>

@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        String str = "{x:.+ 0.+ 0.+ 0,y:.+ 123.+ 33.- 66,z:.+ 678.- 1223.+ 0}";
+        String str = "{x:+0+0+0,y:+123+33-66,z:+678-1223+0}";
         List<String> list = new ArrayList<>();
         System.out.println(new DataUtil().getList(str.replaceAll(" ","")));
 //        str = str.replace('{',' ');

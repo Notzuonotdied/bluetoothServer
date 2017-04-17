@@ -6,6 +6,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 /**
  * Created by wangyu892449346 on 4/14/17.
+ * 获取位置
  */
 
 public class GPSLocation implements LocationListener {

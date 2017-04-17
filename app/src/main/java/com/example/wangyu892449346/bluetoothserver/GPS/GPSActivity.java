@@ -1,4 +1,4 @@
-package com.example.wangyu892449346.bluetoothserver.Activity;
+package com.example.wangyu892449346.bluetoothserver.GPS;
 
 import android.Manifest;
 import android.content.Intent;
@@ -10,10 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.wangyu892449346.bluetoothserver.GPS.GPSListener;
-import com.example.wangyu892449346.bluetoothserver.GPS.GPSLocationListener;
-import com.example.wangyu892449346.bluetoothserver.GPS.GPSLocationManager;
-import com.example.wangyu892449346.bluetoothserver.GPS.GPSProviderStatus;
 import com.example.wangyu892449346.bluetoothserver.util.DataUtil;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;

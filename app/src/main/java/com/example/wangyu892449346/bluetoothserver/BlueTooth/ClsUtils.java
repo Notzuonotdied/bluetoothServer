@@ -1,4 +1,4 @@
-package com.example.wangyu892449346.bluetoothserver.util;
+package com.example.wangyu892449346.bluetoothserver.BlueTooth;
 
 import android.bluetooth.BluetoothDevice;
 import android.util.Log;
@@ -61,7 +61,6 @@ public class ClsUtils {
                                                  BluetoothDevice device) throws Exception {
         Method createBondMethod
                 = btClass.getMethod("cancelPairingUserInput");
-//        cancelBondProcess(btClass, device);
         Boolean returnValue = (Boolean) createBondMethod.invoke(device);
         return returnValue.booleanValue();
     }

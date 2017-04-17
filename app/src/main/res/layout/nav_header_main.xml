@@ -31,6 +31,6 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="物联网开发实验室领沃团队出品" />
+        android:text="@string/about_app" />
 
 </LinearLayout>

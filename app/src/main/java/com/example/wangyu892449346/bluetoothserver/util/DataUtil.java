@@ -16,6 +16,9 @@ public class DataUtil {
     public DataUtil() {
     }
 
+    /**
+     * 单例模式
+     * */
     public DataUtil getInstance() {
         if (instance == null) {
             synchronized (DataUtil.class) {
@@ -63,6 +66,9 @@ public class DataUtil {
         return false;
     }
 
+    /**
+     * 将所有出现的数字匹配出来
+     * */
     public List<String> getList(String managers) {
         List<String> ls = new ArrayList<>();
 //        Pattern pattern = Pattern.compile("\\{x:(.*?),y:(.*?),z:(.*?)\\}");
@@ -73,6 +79,9 @@ public class DataUtil {
         return ls;
     }
 
+    /**
+     * 将完整的一个帧匹配出来
+     * */
     public List<String> getList4Array(String managers) {
         List<String> ls = new ArrayList<>();
         Pattern pattern = Pattern.compile("\\{x:(.*?),y:(.*?),z:(.*?)\\}");
