@@ -36,8 +36,7 @@ public class ClsUtils {
                                  String str) throws Exception {
         try {
             Method removeBondMethod = btClass.getDeclaredMethod("setPin",
-                    new Class[]
-                            {byte[].class});
+                    new Class[]{byte[].class});
             Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice,
                     new Object[]
                             {str.getBytes()});
@@ -56,7 +55,9 @@ public class ClsUtils {
 
     }
 
-    // 取消用户输入
+    /**
+     * 取消用户输入
+     * */
     static public boolean cancelPairingUserInput(Class<?> btClass,
                                                  BluetoothDevice device) throws Exception {
         Method createBondMethod
@@ -65,7 +66,9 @@ public class ClsUtils {
         return returnValue.booleanValue();
     }
 
-    // 取消配对
+    /**
+     * 取消配对
+     * */
     static public boolean cancelBondProcess(Class<?> btClass,
                                             BluetoothDevice device)
 
@@ -75,7 +78,9 @@ public class ClsUtils {
         return returnValue.booleanValue();
     }
 
-    //确认配对
+    /**
+     * 确认配对
+     * */
     static public void setPairingConfirmation(Class<?> btClass, BluetoothDevice device, boolean isConfirm) throws Exception {
         Method setPairingConfirmation = btClass.getDeclaredMethod("setPairingConfirmation", boolean.class);
         setPairingConfirmation.invoke(device, isConfirm);
@@ -83,7 +88,8 @@ public class ClsUtils {
 
 
     /**
-     * @param clsShow
+     * 显示所有信息
+     * @param clsShow 类名
      */
     static public void printAllInform(Class clsShow) {
         try {

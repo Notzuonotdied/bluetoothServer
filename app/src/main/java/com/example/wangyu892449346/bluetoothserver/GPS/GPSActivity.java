@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.wangyu892449346.bluetoothserver.util.DataUtil;
@@ -18,10 +17,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * The type Gps activity.
+ */
 public class GPSActivity extends AppCompatActivity implements OnPermissionCallback {
     private final static String[] MULTI_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION};
+    /**
+     * 数据操作类
+     */
     public DataUtil dataUtil = new DataUtil().getInstance();
     //权限检测类
     private PermissionHelper mPermissionHelper;
@@ -32,10 +37,20 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
     private double time;
     private boolean isFirst = true;
 
+    /**
+     * Sets gps listener.
+     *
+     * @param gpsListener the gps listener
+     */
     public void setGpsListener(GPSListener gpsListener) {
         this.gpsListener = gpsListener;
     }
 
+    /**
+     * Sets gps location manager.
+     *
+     * @param gpsLocationManager the gps location manager
+     */
     public void setGpsLocationManager(GPSLocationManager gpsLocationManager) {
         this.gpsLocationManager = gpsLocationManager;
     }
@@ -56,6 +71,9 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         gpsLocationManager = GPSLocationManager.getInstances(GPSActivity.this);
     }
 
+    /**
+     * Start gps.
+     */
     public void startGPS() {
         gpsLocationManager.start(new MyListener());
     }
@@ -100,6 +118,11 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
 
     }
 
+    /**
+     * 获取当前系统的时间
+     *
+     * @return 当前时间
+     */
     public double getTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("ss", Locale.CHINA);
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
@@ -107,7 +130,13 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
     }
 
     /**
-     * 计算两点间的距离--米
+     * 计算两点间（采用经纬度进行粗略计算）的距离--米
+     *
+     * @param lat1 初始纬度
+     * @param lon1 初始经度
+     * @param lat2 当前纬度
+     * @param lon2 当前经度
+     * @return 两点之间的距离
      */
     public double getDistance(double lat1, double lon1,
                               double lat2, double lon2) {
@@ -120,6 +149,12 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         return results[0];
     }
 
+    /**
+     * String转int.
+     *
+     * @param string 目标String
+     * @return 返回Int
+     */
     public int String2Int(String string) {
         return Integer.valueOf(string);
     }
@@ -129,17 +164,17 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         @Override
         public void UpdateLocation(Location location) {
             if (location != null) {
-                gpsListener.setLatitudeView(location.getLatitude());
-                gpsListener.setLongitudeView(location.getLongitude());
+                gpsListener.OnLatitudeChange(location.getLatitude());
+                gpsListener.OnLongitudeChange(location.getLongitude());
                 if (isFirst) {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                     time = getTime();
                     isFirst = false;
                 }
-                gpsListener.setSpeed(getDistance(latitude, longitude, location.getLatitude(),
+                // 将计算出来的速度回调
+                gpsListener.OnSpeedChange(getDistance(latitude, longitude, location.getLatitude(),
                         location.getLongitude()) / (getTime() - time));
-                Log.i("速度", "time = " + time);
                 time = getTime();
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
@@ -157,21 +192,23 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         public void UpdateGPSProviderStatus(int gpsStatus) {
             switch (gpsStatus) {
                 case GPSProviderStatus.GPS_ENABLED:
-                    Toast.makeText(GPSActivity.this, "GPS开启", Toast.LENGTH_SHORT).show();
+                    gpsListener.OnStatusInfoChange("GPS开启");
                     break;
                 case GPSProviderStatus.GPS_DISABLED:
-                    Toast.makeText(GPSActivity.this, "GPS关闭", Toast.LENGTH_SHORT).show();
+                    gpsListener.OnStatusInfoChange("GPS关闭");
                     break;
                 case GPSProviderStatus.GPS_OUT_OF_SERVICE:
-                    Toast.makeText(GPSActivity.this, "GPS不可用", Toast.LENGTH_SHORT).show();
+                    gpsListener.OnStatusInfoChange("GPS不可用");
                     break;
                 case GPSProviderStatus.GPS_TEMPORARILY_UNAVAILABLE:
-                    Toast.makeText(GPSActivity.this, "GPS暂时不可用", Toast.LENGTH_SHORT).show();
+                    gpsListener.OnStatusInfoChange("GPS暂时不可用");
                     break;
                 case GPSProviderStatus.GPS_AVAILABLE:
-                    //Toast.makeText(GPSActivity.this, "GPS可用啦", Toast.LENGTH_SHORT).show();
+                    gpsListener.OnStatusInfoChange("GPS可用啦");
                     break;
             }
         }
     }
+
+
 }

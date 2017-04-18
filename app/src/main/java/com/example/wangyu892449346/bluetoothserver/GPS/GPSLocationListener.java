@@ -6,8 +6,7 @@ import android.os.Bundle;
  * Created by wangyu892449346 on 4/14/17.
  * 接口
  */
-
-public interface GPSLocationListener {
+interface GPSLocationListener {
     /**
      * 方法描述：位置信息发生改变时被调用
      *

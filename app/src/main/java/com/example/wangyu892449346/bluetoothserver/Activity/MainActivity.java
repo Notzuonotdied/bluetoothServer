@@ -40,19 +40,24 @@ public class MainActivity extends BluetoothActivity
     private TextView speed33;
     private FloatingActionButton fab;
     private GPSListener gpsListener = new GPSListener() {
-        @Override
-        public void setLongitudeView(double longitude) {
+        @Override// 当获取到经度的时候回调
+        public void OnLongitudeChange(double longitude) {
             editLongitude.setText(String.valueOf(longitude));
         }
 
-        @Override
-        public void setLatitudeView(double latitude) {
+        @Override// 当获取到纬度的时候回调
+        public void OnLatitudeChange(double latitude) {
             editLatitude.setText(String.valueOf(latitude));
         }
 
-        @Override
-        public void setSpeed(double speed) {
+        @Override// 当计算完一秒内速度的值的时候回调
+        public void OnSpeedChange(double speed) {
             editSpeed.setText(String.valueOf(speed));
+        }
+
+        @Override
+        public void OnStatusInfoChange(String info) {
+
         }
     };
 
@@ -60,13 +65,13 @@ public class MainActivity extends BluetoothActivity
      * 设置消息回调时候的文本回调
      * */
     private OnChangeText onChangeText = new OnChangeText() {
-        @Override
+        @Override// 当提示文本有变化的时候回调
         public void changeText(String info) {
             statusLabel.setVisibility(View.VISIBLE);
             statusLabel.setText(info);
         }
 
-        @Override
+        @Override// 当接受并处理完蓝牙发送的数据的时候回调
         public void handleMsg(List<String> list) {
             putTableData(list);
         }
@@ -76,21 +81,28 @@ public class MainActivity extends BluetoothActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.setGpsListener(gpsListener);
-        this.setOnChangeText(onChangeText);
+        this.setGpsListener(gpsListener);// 设置回调接口
+        this.setOnChangeText(onChangeText);// 设置回调接口
         initView();
         initListener();
     }
 
+    /**
+     * 初始化响应事件
+     * */
     private void initListener() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showToast(getString(R.string.loading));
                 connect();
             }
         });
     }
 
+    /**
+     * 初始化UI控件
+     * */
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -148,7 +160,7 @@ public class MainActivity extends BluetoothActivity
         if (id == R.id.nav_manage) {
             startActivity(new Intent(MainActivity.this, SettingActivity.class));
         } else if (id == R.id.nav_send) {
-
+            showToast(getString(R.string.about_app));
         } else if (id == R.id.connect) {
             connect();
         } else if (id == R.id.btnQuit) {

@@ -84,7 +84,8 @@ public class DataUtil {
      * */
     public List<String> getList4Array(String managers) {
         List<String> ls = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\{x:(.*?),y:(.*?),z:(.*?)\\}");
+        // Pattern pattern = Pattern.compile("\\{x:(.*?),y:(.*?),z:(.*?)\\}");
+        Pattern pattern = Pattern.compile("\\{(.*?)\\}");
         Matcher matcher = pattern.matcher(managers);
         while (matcher.find())
             ls.add(matcher.group());

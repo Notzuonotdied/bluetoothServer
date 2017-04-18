@@ -34,8 +34,8 @@ public class BluetoothActivity extends GPSActivity {
     /**
      * 接收到的字符串
      */
-    String ReceiveData = "";
-    MyHandler handler;
+    private String ReceiveData = "";
+    private MyHandler handler;
     /**
      * device var
      */
@@ -220,13 +220,13 @@ public class BluetoothActivity extends GPSActivity {
             }
             System.arraycopy(buff, 0, newBuff, 0, length);
             final List<String> list = dataUtil.getList4Array(new String(newBuff).trim());
-            Log.d("Notzuonotdied", "String: " + list + "list.size() = " + list.size());
+            //Log.d("Notzuonotdied", "String: " + list + "list.size() = " + list.size());
             int count = 0;
             while (count < list.size()) {
                 Message msg = Message.obtain();
                 msg.what = 1;
                 ReceiveData = list.get(count++);
-                Log.d("Notzuonotdied", "String: " + list + "count = " + count);
+                //Log.d("Notzuonotdied", "String: " + list + "count = " + count);
                 handler.sendMessage(msg);  //发送消息:系统会自动调用handleMessage( )方法来处理消息
             }
         }
@@ -243,9 +243,8 @@ public class BluetoothActivity extends GPSActivity {
                 case ReceiveMsg:
                     Log.i("Data:", ReceiveData);//Data:: x:.+ 0.+ 0.+ 0,y:.+ 0.+ 0.+ 0,z:.+ 0.+ 0
                     if (!TextUtils.isEmpty(ReceiveData) && !"".equals(ReceiveData.trim())) {
-                        Log.i("Notzuonotdied", "开始处理数据了～");
                         List<String> list = dataUtil.getList(ReceiveData);
-                        Log.d("Notzuonotdied", "String: " + list);
+                        Log.d("Notzuonotdied", "开始处理数据了～: " + list);
                         if (null != list && list.size() != 0) {
                             onChangeText.handleMsg(list);
                         }

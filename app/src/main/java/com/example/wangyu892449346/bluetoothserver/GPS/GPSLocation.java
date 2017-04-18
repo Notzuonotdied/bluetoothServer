@@ -4,15 +4,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationProvider;
 import android.os.Bundle;
+
 /**
  * Created by wangyu892449346 on 4/14/17.
  * 获取位置
  */
-
-public class GPSLocation implements LocationListener {
+class GPSLocation implements LocationListener {
     private GPSLocationListener mGpsLocationListener;
 
-    public GPSLocation(GPSLocationListener gpsLocationListener) {
+    GPSLocation(GPSLocationListener gpsLocationListener) {
         this.mGpsLocationListener = gpsLocationListener;
     }
 

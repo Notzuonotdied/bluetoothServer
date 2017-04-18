@@ -13,14 +13,15 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+
 /**
  * Created by wangyu892449346 on 4/14/17.
+ * GPS定位管理类
  */
-
-public class GPSLocationManager {
+class GPSLocationManager {
     private static final String GPS_LOCATION_NAME = android.location.LocationManager.GPS_PROVIDER;
     private static GPSLocationManager gpsLocationManager;
-    private static Object objLock = new Object();
+    private final static Object objLock = new Object();
     private boolean isGpsEnabled;
     private static String mLocateType;
     private WeakReference<Activity> mContext;
@@ -49,7 +50,13 @@ public class GPSLocationManager {
         mMinDistance = 0;
     }
 
-    public static GPSLocationManager getInstances(Activity context) {
+    /**
+     * Gets instances.
+     *
+     * @param context the context
+     * @return the instances
+     */
+    static GPSLocationManager getInstances(Activity context) {
         if (gpsLocationManager == null) {
             synchronized (objLock) {
                 if (gpsLocationManager == null) {
@@ -81,19 +88,19 @@ public class GPSLocationManager {
     /**
      * 方法描述：开启定位（默认情况下不会强制要求用户打开GPS设置面板）
      *
-     * @param gpsLocationListener
+     * @param gpsLocationListener the gps location listener
      */
-    public void start(GPSLocationListener gpsLocationListener) {
+    void start(GPSLocationListener gpsLocationListener) {
         this.start(gpsLocationListener, isOPenGps);
     }
 
     /**
      * 方法描述：开启定位
      *
-     * @param gpsLocationListener
+     * @param gpsLocationListener the gps location listener
      * @param isOpenGps           当用户GPS未开启时是否强制用户开启GPS
      */
-    public void start(GPSLocationListener gpsLocationListener, boolean isOpenGps) {
+    void start(GPSLocationListener gpsLocationListener, boolean isOpenGps) {
         this.isOPenGps = isOpenGps;
         if (mContext.get() == null) {
             return;
@@ -120,7 +127,7 @@ public class GPSLocationManager {
     /**
      * 方法描述：转到手机设置界面，用户设置GPS
      */
-    public void openGPS() {
+    private void openGPS() {
         Toast.makeText(mContext.get(), "请打开GPS设置", Toast.LENGTH_SHORT).show();
         if (Build.VERSION.SDK_INT > 15) {
             Intent intent = new Intent(
