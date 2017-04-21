@@ -94,7 +94,6 @@ public class MainActivity extends BluetoothActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast(getString(R.string.loading));
                 connect();
             }
         });

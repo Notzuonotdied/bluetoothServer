@@ -45,4 +45,5 @@
     <string name="modle_3">模块3角度</string>
 
     <string name="about_app">物联网开发实验室领沃团队出品</string>
+    <string name="finding">尚未查找到设备，请稍后～</string>
 </resources>

@@ -17,8 +17,7 @@ public class ClsUtils {
     static public boolean createBond(Class btClass, BluetoothDevice btDevice)
             throws Exception {
         Method createBondMethod = btClass.getMethod("createBond");
-        Boolean returnValue = (Boolean) createBondMethod.invoke(btDevice);
-        return returnValue.booleanValue();
+        return (Boolean) createBondMethod.invoke(btDevice);
     }
 
     /**

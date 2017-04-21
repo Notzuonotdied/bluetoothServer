@@ -28,12 +28,13 @@
             </intent-filter>
         </activity>
         <!-- 这是一个蓝牙广播 -->
-        <receiver android:name=".BlueTooth.receiver.BluetoothReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.bluetooth.device.action.PAIRING_REQUEST" />
-                <action android:name="android.bluetooth.device.action.FOUND" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver android:name=".BlueTooth.receiver.BluetoothReceiver">-->
+            <!--<intent-filter android:priority="1000">-->
+                <!--<action android:name="android.bluetooth.device.action.PAIRING_REQUEST" />-->
+                <!--<action android:name="android.bluetooth.device.action.FOUND" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <receiver android:name=".BlueTooth.receiver.BluetoothReceiver"/>
 
         <activity
             android:name=".Activity.SettingActivity"

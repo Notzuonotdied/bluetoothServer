@@ -1,9 +1,14 @@
 package com.example.wangyu892449346.bluetoothserver.BlueTooth;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.wangyu892449346.bluetoothserver.BlueTooth.receiver.BluetoothReceiver;
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSActivity;
 import com.example.wangyu892449346.bluetoothserver.R;
 
@@ -21,16 +27,23 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.UUID;
 
-public class BluetoothActivity extends GPSActivity {
-
+public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.BRInteraction {
     /*
     * 这些是从蓝牙获取的参数,这条是蓝牙串口通用的UUID，不要更改
     * */
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     /**
+     * 目标蓝牙设备的地址
+     * */
+    public String TargetDeviceAddr = null;
+    /**
      * 当接受到蓝牙消息
      */
     private static final int ReceiveMsg = 1;
+    /**
+     * 当蓝牙匹配成功并获取到了目标设备的地址
+     * */
+    private static final int ReceiveAddress = 10086;
     /**
      * 接收到的字符串
      */
@@ -57,7 +70,18 @@ public class BluetoothActivity extends GPSActivity {
         super.onCreate(savedInstanceState);
         initListener();
         InitBluetooth();
+        initReceive();
         handler = new MyHandler();
+    }
+
+    private void initReceive() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.bluetooth.device.action.PAIRING_REQUEST");
+        intentFilter.addAction("android.bluetooth.device.action.FOUND");
+        intentFilter.setPriority(10086);
+        BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
+        registerReceiver(bluetoothReceiver, intentFilter);
+        bluetoothReceiver.setBRInteractionListener(this);
     }
 
     private void initListener() {
@@ -101,7 +125,14 @@ public class BluetoothActivity extends GPSActivity {
         }
         mBluetoothAdapter.startDiscovery();
         //创建连接
-        new ConnectTask().execute("98:D3:32:10:A3:54");
+        if (!TextUtils.isEmpty(TargetDeviceAddr) && btSocket == null) {
+            mayRequestLocation();
+            onChangeText.changeText(getString(R.string.loading));
+            new ConnectTask().execute(TargetDeviceAddr);
+        } else if (TextUtils.isEmpty(TargetDeviceAddr)){
+            onChangeText.changeText(getString(R.string.finding));
+            showToast(getString(R.string.finding));
+        }
     }
 
     @Nullable
@@ -113,12 +144,15 @@ public class BluetoothActivity extends GPSActivity {
                 if (rThread != null) {
                     rThread.join();
                 }
+                onChangeText.changeText(getString(R.string.close));
                 return getResources().getString(R.string.close);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                onChangeText.changeText(getString(R.string.close_fail));
                 return getResources().getString(R.string.close_fail);
             } catch (IOException e) {
                 e.printStackTrace();
+                onChangeText.changeText(getString(R.string.close_fail));
                 return getResources().getString(R.string.close_fail);
             }
         }
@@ -129,7 +163,7 @@ public class BluetoothActivity extends GPSActivity {
      * 显示Toast
      *
      * @param text 显示Toast的内容
-     * */
+     */
     public void showToast(String text) {
         if (mToast == null) {
             mToast = Toast.makeText(this, text, Toast.LENGTH_LONG);
@@ -137,6 +171,28 @@ public class BluetoothActivity extends GPSActivity {
             mToast.setText(text);
         }
         mToast.show();
+    }
+
+    @Override
+    public void OnFoundTargetDevice(String targetDeviceAdr) {
+        TargetDeviceAddr = targetDeviceAdr;
+        onChangeText.changeText("找到设备了，可以进行连接了～");
+        Log.i("FoundDevice",targetDeviceAdr);
+    }
+
+    /**
+     * 请求获取用户粗略定位的权限
+     * android 6.0及其以上使用
+     */
+    private void mayRequestLocation() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int check = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            if (check != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                }, 0);
+            }
+        }
     }
 
     /**
@@ -201,7 +257,9 @@ public class BluetoothActivity extends GPSActivity {
                     int readCount = 0; // 已经成功读取的字节的个数
                     while (readCount < count) {
                         //读取数据存储在buff数组中
-                        readCount += inStream.read(buff, readCount, count - readCount);
+                        if (btSocket.isConnected()) {
+                            readCount += inStream.read(buff, readCount, count - readCount);
+                        }
                     }
                     processBuffer(buff, count);
                 } catch (IOException e) {
@@ -234,7 +292,7 @@ public class BluetoothActivity extends GPSActivity {
 
     /**
      * 更新界面的Handler类
-     * */
+     */
     private class MyHandler extends Handler {
 
         @Override
@@ -249,6 +307,9 @@ public class BluetoothActivity extends GPSActivity {
                             onChangeText.handleMsg(list);
                         }
                     }
+                    break;
+                case ReceiveAddress:
+
                     break;
             }
         }

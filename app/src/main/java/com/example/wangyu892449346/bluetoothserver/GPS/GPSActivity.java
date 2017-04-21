@@ -209,6 +209,4 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
             }
         }
     }
-
-
 }
