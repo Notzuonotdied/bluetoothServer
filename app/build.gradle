@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.example.wangyu892449346.bluetoothserver"
+        applicationId 'com.example.bluetoothserver'
         minSdkVersion 19
         targetSdkVersion 22
         versionCode 1

@@ -2,14 +2,14 @@ package com.example.wangyu892449346.bluetoothserver.GPS;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.widget.Toast;
 
-import com.example.wangyu892449346.bluetoothserver.util.DataUtil;
 import com.fastaccess.permission.base.PermissionHelper;
 import com.fastaccess.permission.base.callback.OnPermissionCallback;
 
@@ -24,10 +24,6 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
     private final static String[] MULTI_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION};
-    /**
-     * 数据操作类
-     */
-    public DataUtil dataUtil = new DataUtil().getInstance();
     //权限检测类
     private PermissionHelper mPermissionHelper;
     private GPSLocationManager gpsLocationManager;
@@ -38,7 +34,7 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
     private boolean isFirst = true;
 
     /**
-     * Sets gps listener.
+     * 设置GPS listener
      *
      * @param gpsListener the gps listener
      */
@@ -100,7 +96,7 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
 
     @Override
     public void onPermissionPreGranted(@NonNull String permissionsName) {
-
+        getLocation();
     }
 
     @Override
@@ -159,6 +155,16 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         return Integer.valueOf(string);
     }
 
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
+                (GPSActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            mPermissionHelper.request(MULTI_PERMISSIONS);
+            return;
+        }
+    }
+
     private class MyListener implements GPSLocationListener {
 
         @Override
@@ -184,7 +190,7 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         @Override
         public void UpdateStatus(String provider, int status, Bundle extras) {
             if (TextUtils.equals("gps", provider)) {
-                //Toast.makeText(GPSActivity.this, "定位类型：" + provider, Toast.LENGTH_SHORT).show();
+                gpsListener.OnStatusInfoChange("定位类型：" + provider);
             }
         }
 

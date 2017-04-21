@@ -69,7 +69,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
     }
 
     public interface BRInteraction {
-        public void OnFoundTargetDevice(String targetDeviceAdr);
+        void OnFoundTargetDevice(String targetDeviceAdr);
     }
 
     public void setBRInteractionListener(BRInteraction brInteraction) {

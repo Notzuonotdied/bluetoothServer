@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.wangyu892449346.bluetoothserver.BlueTooth.receiver.BluetoothReceiver;
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSActivity;
 import com.example.wangyu892449346.bluetoothserver.R;
+import com.example.wangyu892449346.bluetoothserver.util.DataUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +29,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.BRInteraction {
+    /**
+     * 数据操作类
+     */
+    public DataUtil dataUtil = new DataUtil().getInstance();
     /*
     * 这些是从蓝牙获取的参数,这条是蓝牙串口通用的UUID，不要更改
     * */
@@ -248,7 +253,9 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
         @Override
         public void run() {
             while (btSocket != null) {
-                // 缓冲区大小
+                // 缓冲区大小,这个缓冲区是为了拼接蓝牙发送过来的字符
+                // 在本项目中硬件设备每次发送的字节在18~50之间
+                // 示例字符串：{x:.+0.+0.+0,y:.+123.+33.-66,z:.+678.-1223.+0}
                 int count = 55;
                 //定义一个存储空间buff
                 byte[] buff = new byte[count];
@@ -268,6 +275,12 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
             }
         }
 
+        /**
+         * 处理流
+         *
+         * @param buff 缓冲区
+         * @param size 缓冲区大小
+         * */
         private void processBuffer(byte[] buff, int size) {
             byte[] newBuff = new byte[size];
             int length = 0;
@@ -278,13 +291,11 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
             }
             System.arraycopy(buff, 0, newBuff, 0, length);
             final List<String> list = dataUtil.getList4Array(new String(newBuff).trim());
-            //Log.d("Notzuonotdied", "String: " + list + "list.size() = " + list.size());
             int count = 0;
             while (count < list.size()) {
                 Message msg = Message.obtain();
-                msg.what = 1;
+                msg.what = ReceiveMsg;
                 ReceiveData = list.get(count++);
-                //Log.d("Notzuonotdied", "String: " + list + "count = " + count);
                 handler.sendMessage(msg);  //发送消息:系统会自动调用handleMessage( )方法来处理消息
             }
         }

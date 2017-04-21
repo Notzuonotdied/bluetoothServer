@@ -25,6 +25,13 @@ class GPSLocationManager {
     private boolean isGpsEnabled;
     private static String mLocateType;
     private WeakReference<Activity> mContext;
+    /**
+     * 描述地理位置信息的类，记录了经纬度、海拔高度、获取坐标时间、速度、方位等。
+     * 可以通过LocationManager.getLastKnowLocation(provider)获取位置坐标，
+     * provider就是上文中提到的GPS_PROVIDER、NETWORK_PROVIDER、PASSIVE_PROVIDER、FUSED_PROVIDER；
+     * 不过很多时候得到的Location对象为null；
+     * 实时动态坐标可以在监听器locationListener的onLocationChanged(Location location)方法中来获取。
+     * */
     private LocationManager locationManager;
     private GPSLocation mGPSLocation;
     private boolean isOPenGps;
@@ -41,17 +48,17 @@ class GPSLocationManager {
             locationManager = (LocationManager) (mContext.get().getSystemService(Context.LOCATION_SERVICE));
         }
         //定位类型：GPS
-        mLocateType = locationManager.GPS_PROVIDER;
+        mLocateType = LocationManager.GPS_PROVIDER;
         //默认不强制打开GPS设置面板
         isOPenGps = false;
         //默认定位时间间隔为1000ms
-        mMinTime = 1000;
+        mMinTime = 100;
         //默认位置可更新的最短距离为0m
         mMinDistance = 0;
     }
 
     /**
-     * Gets instances.
+     * 获取单例
      *
      * @param context the context
      * @return the instances
@@ -100,7 +107,7 @@ class GPSLocationManager {
      * @param gpsLocationListener the gps location listener
      * @param isOpenGps           当用户GPS未开启时是否强制用户开启GPS
      */
-    void start(GPSLocationListener gpsLocationListener, boolean isOpenGps) {
+    public void start(GPSLocationListener gpsLocationListener, boolean isOpenGps) {
         this.isOPenGps = isOpenGps;
         if (mContext.get() == null) {
             return;

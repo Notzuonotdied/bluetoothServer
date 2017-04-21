@@ -57,7 +57,7 @@ public class MainActivity extends BluetoothActivity
 
         @Override
         public void OnStatusInfoChange(String info) {
-
+            statusLabel.setText(info);
         }
     };
 
