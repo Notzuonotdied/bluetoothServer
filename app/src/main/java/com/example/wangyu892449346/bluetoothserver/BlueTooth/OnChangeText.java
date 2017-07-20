@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface OnChangeText {
     void changeText(String info);
-    void handleMsg(List<String> list);
+    void handleMsg(List<String> list, char what);
 }

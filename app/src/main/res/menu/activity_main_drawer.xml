@@ -4,28 +4,43 @@
     <item
         android:id="@+id/nav_manage"
         android:icon="@drawable/ic_menu_manage"
-        android:title="设置" />
+        android:title="@string/setting" />
 
-    <item
-        android:id="@+id/gps"
-        android:title="开启GPS"
-        android:icon="@drawable/ic_menu_share"/>
-    <item
-        android:id="@+id/connect"
-        android:icon="@drawable/ic_menu_send"
-        android:title="@string/action_connect"/>
+    <item android:title="@string/tcp">
+        <menu>
+            <item
+                android:id="@+id/TcpClient"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/tcp_client" />
+            <item
+                android:id="@+id/TcpServer"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/tcp_server" />
+        </menu>
+    </item>
+    <item android:title="@string/other">
+        <menu>
+            <item
+                android:id="@+id/gps"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/open_GPS" />
+            <item
+                android:id="@+id/connect"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/action_connect" />
 
-    <item
-        android:icon="@drawable/ic_menu_manage"
-        android:id="@+id/btnQuit"
-        android:title="中断连接"/>
-
-    <item android:title="关于">
+            <item
+                android:id="@+id/btnQuit"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/disconnect" />
+        </menu>
+    </item>
+    <item android:title="@string/about">
         <menu>
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="领沃" />
+                android:title="@string/ling_wo" />
         </menu>
     </item>
 

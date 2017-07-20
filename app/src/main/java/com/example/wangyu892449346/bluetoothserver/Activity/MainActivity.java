@@ -2,27 +2,45 @@ package com.example.wangyu892449346.bluetoothserver.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wangyu892449346.bluetoothserver.BlueTooth.BluetoothActivity;
 import com.example.wangyu892449346.bluetoothserver.BlueTooth.OnChangeText;
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSListener;
 import com.example.wangyu892449346.bluetoothserver.R;
+import com.example.wangyu892449346.bluetoothserver.WIFI.SocketTransceiver;
+import com.example.wangyu892449346.bluetoothserver.WIFI.TcpClient;
+import com.example.wangyu892449346.bluetoothserver.WIFI.TcpServer;
 
+import java.lang.ref.WeakReference;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import java.util.List;
 
 public class MainActivity extends BluetoothActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     //定义组件
     private TextView statusLabel;
@@ -38,7 +56,18 @@ public class MainActivity extends BluetoothActivity
     private TextView speed31;
     private TextView speed32;
     private TextView speed33;
+    private TextView gas;
     private FloatingActionButton fab;
+    private LinearLayout tcpClient;
+    private android.support.design.widget.TextInputEditText IP;
+    private android.support.design.widget.TextInputEditText port;
+    private Button client_confirm;
+    private LinearLayout tcpServer;
+    private android.support.design.widget.TextInputEditText server_port;
+    private Button server_confirm;
+    private android.support.v7.widget.AppCompatTextView serverIP;
+    private MyHandler myHandler = new MyHandler(this);
+
     private GPSListener gpsListener = new GPSListener() {
         @Override// 当获取到经度的时候回调
         public void OnLongitudeChange(double longitude) {
@@ -63,7 +92,7 @@ public class MainActivity extends BluetoothActivity
 
     /**
      * 设置消息回调时候的文本回调
-     * */
+     */
     private OnChangeText onChangeText = new OnChangeText() {
         @Override// 当提示文本有变化的时候回调
         public void changeText(String info) {
@@ -72,8 +101,12 @@ public class MainActivity extends BluetoothActivity
         }
 
         @Override// 当接受并处理完蓝牙发送的数据的时候回调
-        public void handleMsg(List<String> list) {
-            putTableData(list);
+        public void handleMsg(List<String> list, char what) {
+            if (list.size() < 9) {
+                putColumnData(list, what);
+            } else {
+                putTableData(list);
+            }
         }
     };
 
@@ -89,19 +122,125 @@ public class MainActivity extends BluetoothActivity
 
     /**
      * 初始化响应事件
-     * */
+     */
     private void initListener() {
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(this);
+        server_confirm.setOnClickListener(this);
+        client_confirm.setOnClickListener(this);
+    }
+
+    private TcpServer server;
+
+    private void startService() {
+        int port = Integer.valueOf(server_port.getText().toString());
+        server = new TcpServer(port) {
+
             @Override
-            public void onClick(View v) {
-                connect();
+            public void onConnect(SocketTransceiver client) {
+                Message message = Message.obtain();
+                message.what = 1;
+                message.obj = "Client " + client.getInetAddress().getHostAddress() + " connect.";
+                myHandler.sendMessage(message);
             }
-        });
+
+            @Override
+            public void onConnectFailed() {
+                Message message = Message.obtain();
+                message.what = 1;
+                message.obj = "Client Connect Failed.";
+                myHandler.sendMessage(message);
+            }
+
+            @Override
+            public void onReceive(SocketTransceiver client, String s) {
+                Message message = Message.obtain();
+                message.what = 2;
+                message.obj = s;
+                myHandler.sendMessage(message);
+                client.send(s);
+            }
+
+            @Override
+            public void onDisconnect(SocketTransceiver client) {
+                Message message = Message.obtain();
+                message.what = 1;
+                message.obj = "Client " + client.getInetAddress().getHostAddress() + " disconnect.";
+                myHandler.sendMessage(message);
+            }
+
+            @Override
+            public void onServerStop() {
+                Message message = Message.obtain();
+                message.what = 1;
+                message.obj = "TCP server stop.";
+                myHandler.sendMessage(message);
+            }
+        };
+        Message message = Message.obtain();
+        message.what = 1;
+        message.obj = "TCP server start.";
+        myHandler.sendMessage(message);
+        server.start();
+    }
+
+
+    private class MyHandler extends android.os.Handler {
+        private final WeakReference<MainActivity> mActivity;
+
+        MyHandler(MainActivity activity) {
+            mActivity = new WeakReference<MainActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity activity = mActivity.get();
+            switch (msg.what) {
+                case 1:
+                    Toast.makeText(activity, msg.obj.toString(), Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    List<String> list = dataUtil.getList(msg.obj.toString());
+                    if (null != list && list.size() != 0) {
+                        onChangeText.handleMsg(list, msg.obj.toString().trim().charAt(0));
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void startClient() {
+
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.fab:
+                connect();
+                break;
+            case R.id.server_confirm:
+                if (server_port.isEnabled()) {
+                    startService();
+                    server_port.setEnabled(false);
+                    server_confirm.setText(getString(R.string.alert));
+                } else {
+                    if (server != null) {
+                        server.stop();
+                    }
+                    server_confirm.setText(getString(R.string.confirm));
+                    server_port.setEnabled(true);
+                }
+                break;
+            case R.id.client_confirm:
+                Toast.makeText(MainActivity.this, "尚未完成～",Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     /**
      * 初始化UI控件
-     * */
+     */
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -128,6 +267,20 @@ public class MainActivity extends BluetoothActivity
         speed31 = (TextView) findViewById(R.id.speed31);
         speed32 = (TextView) findViewById(R.id.speed32);
         speed33 = (TextView) findViewById(R.id.speed33);
+        gas = (TextView) findViewById(R.id.gas);
+
+        tcpClient = (LinearLayout) findViewById(R.id.TcpClient);
+        IP = (TextInputEditText) findViewById(R.id.ip);
+        port = (TextInputEditText) findViewById(R.id.port);
+        client_confirm = (Button) findViewById(R.id.client_confirm);
+
+        tcpServer = (LinearLayout) findViewById(R.id.TcpServer);
+        serverIP = (AppCompatTextView) findViewById(R.id.server_ip);
+        server_port = (TextInputEditText) findViewById(R.id.server_port);
+        server_confirm = (Button) findViewById(R.id.server_confirm);
+
+        String temp = getResources().getString(R.string.server_ip) + getHostIP();
+        serverIP.setText(temp);
     }
 
     @Override
@@ -154,23 +307,65 @@ public class MainActivity extends BluetoothActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_manage) {
-            startActivity(new Intent(MainActivity.this, SettingActivity.class));
-        } else if (id == R.id.nav_send) {
-            showToast(getString(R.string.about_app));
-        } else if (id == R.id.connect) {
-            connect();
-        } else if (id == R.id.btnQuit) {
-            disConnect();//中断连接
-        } else if (id == R.id.gps) {
-            this.startGPS();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_manage:
+                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                break;
+            case R.id.nav_send:
+                showToast(getString(R.string.about_app));
+                break;
+            case R.id.connect:
+                connect();
+                break;
+            case R.id.btnQuit:
+                disConnect();//中断连接
+                break;
+            case R.id.gps:
+                this.startGPS();
+                break;
+            case R.id.TcpClient:
+                if (tcpClient.getVisibility() == View.GONE) {
+                    this.tcpClient.setVisibility(View.VISIBLE);
+                } else {
+                    this.tcpClient.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.TcpServer:
+                if (tcpServer.getVisibility() == View.GONE) {
+                    this.tcpServer.setVisibility(View.VISIBLE);
+                } else {
+                    this.tcpServer.setVisibility(View.GONE);
+                }
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void putColumnData(List<String> str, char what) {
+        switch (what) {
+            case 'A':
+                setNavTextStatus(String2Int(str.get(0)), speed11);
+                setNavTextStatus(String2Int(str.get(1)), speed21);
+                setNavTextStatus(String2Int(str.get(2)), speed31);
+                break;
+            case 'B':
+                setPitchTextStatus(String2Int(str.get(0)), speed12);
+                setPitchTextStatus(String2Int(str.get(1)), speed22);
+                setPitchTextStatus(String2Int(str.get(2)), speed32);
+                break;
+            case 'C':
+                setYawTextStatus(String2Int(str.get(0)), speed13);
+                setYawTextStatus(String2Int(str.get(1)), speed23);
+                setYawTextStatus(String2Int(str.get(2)), speed33);
+                break;
+            case 'S':
+                setGasTextStatus(String2Double(str.get(0)), gas);
+                break;
+        }
     }
 
     private void putTableData(List<String> str) {
@@ -203,6 +398,21 @@ public class MainActivity extends BluetoothActivity
     }
 
     /**
+     * 当gas浓度出现超出临界值的时候颜色改变。
+     *
+     * @param gas 传入的浓度值
+     * @param tv    传入角度值对应的TextView
+     */
+    private void setGasTextStatus(double gas, TextView tv) {
+        if (dataUtil.isOverEdge(gas)) {
+            tv.setBackgroundColor(this.getResources().getColor(R.color.colorAccent));
+        } else {
+            tv.setBackgroundColor(this.getResources().getColor(R.color.white));
+        }
+        tv.setText(String.valueOf(gas));
+    }
+
+    /**
      * 当Pitch角度出现超出临界值的时候颜色改变。
      *
      * @param angle 传入的角度值
@@ -230,6 +440,40 @@ public class MainActivity extends BluetoothActivity
             tv.setBackgroundColor(this.getResources().getColor(R.color.white));
         }
         tv.setText(String.valueOf(angle));
+    }
+
+    /**
+     * 获取ip地址
+     *
+     * @return IP地址
+     */
+    public String getHostIP() {
+
+        String hostIp = null;
+        try {
+            Enumeration nis = NetworkInterface.getNetworkInterfaces();
+            InetAddress ia = null;
+            while (nis.hasMoreElements()) {
+                NetworkInterface ni = (NetworkInterface) nis.nextElement();
+                Enumeration<InetAddress> ias = ni.getInetAddresses();
+                while (ias.hasMoreElements()) {
+                    ia = ias.nextElement();
+                    if (ia instanceof Inet6Address) {
+                        continue;// skip ipv6
+                    }
+                    String ip = ia.getHostAddress();
+                    if (!"127.0.0.1".equals(ip)) {
+                        hostIp = ia.getHostAddress();
+                        break;
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            Log.i("FuncTcpServer", "SocketException");
+            e.printStackTrace();
+        }
+        return hostIp;
+
     }
 }
 

@@ -65,6 +65,7 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
     private Toast mToast;
     private OnChangeText onChangeText;
     private BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    private BluetoothReceiver bluetoothReceiver;
 
     public void setOnChangeText(OnChangeText onChangeText) {
         this.onChangeText = onChangeText;
@@ -84,7 +85,7 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
         intentFilter.addAction("android.bluetooth.device.action.PAIRING_REQUEST");
         intentFilter.addAction("android.bluetooth.device.action.FOUND");
         intentFilter.setPriority(10086);
-        BluetoothReceiver bluetoothReceiver = new BluetoothReceiver();
+        bluetoothReceiver = new BluetoothReceiver();
         registerReceiver(bluetoothReceiver, intentFilter);
         bluetoothReceiver.setBRInteractionListener(this);
     }
@@ -115,6 +116,7 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
                 btSocket = null;
                 rThread.join();
             }
+            unregisterReceiver(bluetoothReceiver);
             this.finish();
         } catch (IOException e) {
             e.printStackTrace();
@@ -315,7 +317,7 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
                         List<String> list = dataUtil.getList(ReceiveData);
                         Log.d("Notzuonotdied", "开始处理数据了～: " + list);
                         if (null != list && list.size() != 0) {
-                            onChangeText.handleMsg(list);
+                            onChangeText.handleMsg(list, 'N');
                         }
                     }
                     break;

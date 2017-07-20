@@ -9,6 +9,16 @@
     tools:context="com.example.wangyu892449346.bluetoothserver.Activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <include
+        android:id="@+id/TcpClient"
+        layout="@layout/client_setting"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/TcpServer"
+        layout="@layout/server_setting"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/statusLabel"
         android:layout_width="match_parent"
@@ -139,6 +149,43 @@
             <TextView
                 android:id="@+id/speed33"
                 style="@style/table_item_style" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp">
+
+            <TextView
+                style="@style/table_item_style"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:text="ID" />
+
+            <TextView
+                style="@style/table_item_style1"
+                android:paddingBottom="2dp"
+                android:paddingTop="4dp"
+                android:text="可燃气体浓度"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp">
+
+            <TextView
+                style="@style/table_item_style"
+                android:text="浓度（V）" />
+
+            <TextView
+                android:id="@+id/gas"
+                style="@style/table_item_style1" />
         </TableRow>
     </TableLayout>
 

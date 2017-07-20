@@ -155,6 +155,10 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
         return Integer.valueOf(string);
     }
 
+    public double String2Double(String string) {
+        return Double.valueOf(string);
+    }
+
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission

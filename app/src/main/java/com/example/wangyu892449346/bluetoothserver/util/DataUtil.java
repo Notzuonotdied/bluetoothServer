@@ -38,6 +38,10 @@ public class DataUtil {
         return Constant.editYawNum < Math.abs(angle);
     }
 
+    public boolean isOverEdge(double gas) {
+        return gas > 0.3 || gas < 0.1;
+    }
+
     public boolean isNavOverStep(int angle) {
         angle = Math.abs(angle);
         int speed = Math.abs(Constant.speed);
