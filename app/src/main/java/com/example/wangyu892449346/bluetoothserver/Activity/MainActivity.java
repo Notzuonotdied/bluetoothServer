@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,6 +68,7 @@ public class MainActivity extends BluetoothActivity
     private Button server_confirm;
     private android.support.v7.widget.AppCompatTextView serverIP;
     private MyHandler myHandler = new MyHandler(this);
+    private TcpServer server;
 
     private GPSListener gpsListener = new GPSListener() {
         @Override// 当获取到经度的时候回调
@@ -129,11 +131,8 @@ public class MainActivity extends BluetoothActivity
         client_confirm.setOnClickListener(this);
     }
 
-    private TcpServer server;
-
     private void startService() {
-        int port = Integer.valueOf(server_port.getText().toString());
-        server = new TcpServer(port) {
+        server = new TcpServer(Integer.valueOf(server_port.getText().toString())) {
 
             @Override
             public void onConnect(SocketTransceiver client) {
@@ -221,6 +220,13 @@ public class MainActivity extends BluetoothActivity
                 break;
             case R.id.server_confirm:
                 if (server_port.isEnabled()) {
+                    if (server != null) {
+                        server.stop();
+                    }
+                    if (TextUtils.isEmpty(server_port.getText())) {
+                        Toast.makeText(MainActivity.this, "请输入端口号", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
                     startService();
                     server_port.setEnabled(false);
                     server_confirm.setText(getString(R.string.alert));
@@ -281,6 +287,8 @@ public class MainActivity extends BluetoothActivity
 
         String temp = getResources().getString(R.string.server_ip) + getHostIP();
         serverIP.setText(temp);
+
+        server = null;
     }
 
     @Override
@@ -301,8 +309,7 @@ public class MainActivity extends BluetoothActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
