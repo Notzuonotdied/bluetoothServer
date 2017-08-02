@@ -1,5 +1,8 @@
 package com.example.wangyu892449346.bluetoothserver.WIFI;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -12,10 +15,9 @@ import java.util.List;
  */
 
 public abstract class TcpServer implements Runnable {
-
     private int port;
     private boolean runFlag;
-    private List<SocketTransceiver> clients = new ArrayList<SocketTransceiver>();
+    private List<SocketTransceiver> clients = new ArrayList<>();
 
     /**
      * 实例化
@@ -28,6 +30,7 @@ public abstract class TcpServer implements Runnable {
 
     /**
      * 启动服务器
+     * <p>
      * 如果启动失败，会回调{@code onServerStop()}
      */
     public void start() {
@@ -37,6 +40,7 @@ public abstract class TcpServer implements Runnable {
 
     /**
      * 停止服务器
+     * <p>
      * 服务器停止后，会回调{@code onServerStop()}
      */
     public void stop() {
@@ -58,6 +62,8 @@ public abstract class TcpServer implements Runnable {
                     // 接受客户端连接出错
                     e.printStackTrace();
                     this.onConnectFailed();
+                    Log.i("get", "run: this.onConnectFailed() ->" + e.getCause());
+                    Log.i("get", "run: this.onConnectFailed() ->" + System.err);
                 }
             }
             // 停止服务器，断开与每个客户端的连接
@@ -87,7 +93,10 @@ public abstract class TcpServer implements Runnable {
 
             @Override
             public void onReceive(InetAddress addr, String s) {
-                TcpServer.this.onReceive(this, s);
+                if (!TextUtils.isEmpty(s)) {
+                    TcpServer.this.onReceive(this, s);
+                    Log.i("get", "TcpServer.this.onReceive = " + s);
+                }
             }
 
             @Override
@@ -98,11 +107,13 @@ public abstract class TcpServer implements Runnable {
         };
         client.start();
         clients.add(client);
+        Log.d("get", "添加成功");
         this.onConnect(client);
     }
 
     /**
      * 客户端：连接建立
+     * <p>
      * 注意：此回调是在新线程中执行的
      *
      * @param client SocketTransceiver对象
@@ -111,12 +122,14 @@ public abstract class TcpServer implements Runnable {
 
     /**
      * 客户端：连接建立失败
+     * <p>
      * 注意：此回调是在新线程中执行的
      */
     public abstract void onConnectFailed();
 
     /**
      * 客户端：收到字符串
+     * <p>
      * 注意：此回调是在新线程中执行的
      *
      * @param client SocketTransceiver对象
@@ -126,6 +139,7 @@ public abstract class TcpServer implements Runnable {
 
     /**
      * 客户端：连接断开
+     * <p>
      * 注意：此回调是在新线程中执行的
      *
      * @param client SocketTransceiver对象
@@ -134,6 +148,7 @@ public abstract class TcpServer implements Runnable {
 
     /**
      * 服务器停止
+     * <p>
      * 注意：此回调是在新线程中执行的
      */
     public abstract void onServerStop();
