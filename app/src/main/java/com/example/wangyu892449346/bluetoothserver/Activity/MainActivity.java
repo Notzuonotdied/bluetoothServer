@@ -326,17 +326,17 @@ public class MainActivity extends BluetoothActivity
         switch (what) {
             case 'A':
                 setNavTextStatus(String2Int(str.get(0)), speed11);
-                setNavTextStatus(String2Int(str.get(1)), speed21);
-                setNavTextStatus(String2Int(str.get(2)), speed31);
+                setPitchTextStatus(String2Int(str.get(1)), speed12);
+                setYawTextStatus(String2Int(str.get(2)), speed13);
                 break;
             case 'B':
-                setPitchTextStatus(String2Int(str.get(0)), speed12);
+                setNavTextStatus(String2Int(str.get(0)), speed21);
                 setPitchTextStatus(String2Int(str.get(1)), speed22);
-                setPitchTextStatus(String2Int(str.get(2)), speed32);
+                setYawTextStatus(String2Int(str.get(2)), speed23);
                 break;
             case 'C':
-                setYawTextStatus(String2Int(str.get(0)), speed13);
-                setYawTextStatus(String2Int(str.get(1)), speed23);
+                setNavTextStatus(String2Int(str.get(0)), speed31);
+                setPitchTextStatus(String2Int(str.get(1)), speed32);
                 setYawTextStatus(String2Int(str.get(2)), speed33);
                 break;
             case 'S':
