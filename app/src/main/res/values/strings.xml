@@ -50,7 +50,7 @@
     <string name="port">port</string>
     <string name="server_port">请填写服务端的port</string>
     <string name="IP">IP Address</string>
-    <string name="server_ip">本机的IP：</string>
+    <string name="server_ip">Local IP：</string>
 
     <string name="tcp">TCP</string>
     <string name="tcp_client">TcpClient</string>

@@ -2,7 +2,6 @@ package com.example.wangyu892449346.bluetoothserver.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +28,6 @@ import com.example.wangyu892449346.bluetoothserver.BlueTooth.OnChangeText;
 import com.example.wangyu892449346.bluetoothserver.GPS.GPSListener;
 import com.example.wangyu892449346.bluetoothserver.R;
 import com.example.wangyu892449346.bluetoothserver.WIFI.SocketTransceiver;
-import com.example.wangyu892449346.bluetoothserver.WIFI.TcpClient;
 import com.example.wangyu892449346.bluetoothserver.WIFI.TcpServer;
 
 import java.lang.ref.WeakReference;
@@ -67,8 +65,7 @@ public class MainActivity extends BluetoothActivity
     private android.support.design.widget.TextInputEditText server_port;
     private Button server_confirm;
     private android.support.v7.widget.AppCompatTextView serverIP;
-    private MyHandler myHandler = new MyHandler(this);
-    private TcpServer server;
+    private MyHandler myHandler;
 
     private GPSListener gpsListener = new GPSListener() {
         @Override// 当获取到经度的时候回调
@@ -111,6 +108,7 @@ public class MainActivity extends BluetoothActivity
             }
         }
     };
+    private TcpServer server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +130,9 @@ public class MainActivity extends BluetoothActivity
     }
 
     private void startService() {
+        if (server != null) {
+            server.stop();
+        }
         server = new TcpServer(Integer.valueOf(server_port.getText().toString())) {
 
             @Override
@@ -156,7 +157,8 @@ public class MainActivity extends BluetoothActivity
                 message.what = 2;
                 message.obj = s;
                 myHandler.sendMessage(message);
-                client.send(s);
+                // client.send(s);
+                // Log.i("get", s);
             }
 
             @Override
@@ -182,35 +184,9 @@ public class MainActivity extends BluetoothActivity
         server.start();
     }
 
-
-    private class MyHandler extends android.os.Handler {
-        private final WeakReference<MainActivity> mActivity;
-
-        MyHandler(MainActivity activity) {
-            mActivity = new WeakReference<MainActivity>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            MainActivity activity = mActivity.get();
-            switch (msg.what) {
-                case 1:
-                    Toast.makeText(activity, msg.obj.toString(), Toast.LENGTH_SHORT).show();
-                    break;
-                case 2:
-                    List<String> list = dataUtil.getList(msg.obj.toString());
-                    if (null != list && list.size() != 0) {
-                        onChangeText.handleMsg(list, msg.obj.toString().trim().charAt(0));
-                    }
-                    break;
-            }
-        }
-    }
-
     private void startClient() {
 
     }
-
 
     @Override
     public void onClick(View view) {
@@ -220,9 +196,6 @@ public class MainActivity extends BluetoothActivity
                 break;
             case R.id.server_confirm:
                 if (server_port.isEnabled()) {
-                    if (server != null) {
-                        server.stop();
-                    }
                     if (TextUtils.isEmpty(server_port.getText())) {
                         Toast.makeText(MainActivity.this, "请输入端口号", Toast.LENGTH_SHORT).show();
                         break;
@@ -231,15 +204,12 @@ public class MainActivity extends BluetoothActivity
                     server_port.setEnabled(false);
                     server_confirm.setText(getString(R.string.alert));
                 } else {
-                    if (server != null) {
-                        server.stop();
-                    }
                     server_confirm.setText(getString(R.string.confirm));
                     server_port.setEnabled(true);
                 }
                 break;
             case R.id.client_confirm:
-                Toast.makeText(MainActivity.this, "尚未完成～",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "尚未完成～", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -288,7 +258,7 @@ public class MainActivity extends BluetoothActivity
         String temp = getResources().getString(R.string.server_ip) + getHostIP();
         serverIP.setText(temp);
 
-        server = null;
+        myHandler = new MyHandler(this);
     }
 
     @Override
@@ -356,17 +326,17 @@ public class MainActivity extends BluetoothActivity
         switch (what) {
             case 'A':
                 setNavTextStatus(String2Int(str.get(0)), speed11);
-                setNavTextStatus(String2Int(str.get(1)), speed21);
-                setNavTextStatus(String2Int(str.get(2)), speed31);
+                setPitchTextStatus(String2Int(str.get(1)), speed12);
+                setYawTextStatus(String2Int(str.get(2)), speed13);
                 break;
             case 'B':
-                setPitchTextStatus(String2Int(str.get(0)), speed12);
+                setNavTextStatus(String2Int(str.get(0)), speed21);
                 setPitchTextStatus(String2Int(str.get(1)), speed22);
-                setPitchTextStatus(String2Int(str.get(2)), speed32);
+                setYawTextStatus(String2Int(str.get(2)), speed23);
                 break;
             case 'C':
-                setYawTextStatus(String2Int(str.get(0)), speed13);
-                setYawTextStatus(String2Int(str.get(1)), speed23);
+                setNavTextStatus(String2Int(str.get(0)), speed31);
+                setPitchTextStatus(String2Int(str.get(1)), speed32);
                 setYawTextStatus(String2Int(str.get(2)), speed33);
                 break;
             case 'S':
@@ -408,7 +378,7 @@ public class MainActivity extends BluetoothActivity
      * 当gas浓度出现超出临界值的时候颜色改变。
      *
      * @param gas 传入的浓度值
-     * @param tv    传入角度值对应的TextView
+     * @param tv  传入角度值对应的TextView
      */
     private void setGasTextStatus(double gas, TextView tv) {
         if (dataUtil.isOverEdge(gas)) {
@@ -481,6 +451,30 @@ public class MainActivity extends BluetoothActivity
         }
         return hostIp;
 
+    }
+
+    private class MyHandler extends android.os.Handler {
+        private final WeakReference<MainActivity> mActivity;
+
+        MyHandler(MainActivity activity) {
+            mActivity = new WeakReference<MainActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            MainActivity activity = mActivity.get();
+            switch (msg.what) {
+                case 1:
+                    Toast.makeText(activity, msg.obj.toString(), Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    List<String> list = dataUtil.getList(msg.obj.toString());
+                    if (null != list && list.size() != 0) {
+                        onChangeText.handleMsg(list, msg.obj.toString().trim().charAt(0));
+                    }
+                    break;
+            }
+        }
     }
 }
 

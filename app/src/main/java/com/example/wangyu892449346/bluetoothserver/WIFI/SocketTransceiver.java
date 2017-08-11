@@ -1,5 +1,7 @@
 package com.example.wangyu892449346.bluetoothserver.WIFI;
 
+import android.util.Log;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,6 +29,10 @@ public abstract class SocketTransceiver implements Runnable {
         this.addr = socket.getInetAddress();
     }
 
+    public static char byteToChar(byte[] b) {
+        return (char) (((b[0] & 0xFF) << 8) | (b[1] & 0xFF));
+    }
+
     /**
      * 获取连接到的Socket地址
      *
@@ -38,6 +44,7 @@ public abstract class SocketTransceiver implements Runnable {
 
     /**
      * 开启Socket收发
+     * <p>
      * 如果开启失败，会断开连接并回调{@code onDisconnect()}
      */
     public void start() {
@@ -47,6 +54,7 @@ public abstract class SocketTransceiver implements Runnable {
 
     /**
      * 断开连接(主动)
+     * <p>
      * 连接断开后，会回调{@code onDisconnect()}
      */
     public void stop() {
@@ -83,20 +91,21 @@ public abstract class SocketTransceiver implements Runnable {
      */
     @Override
     public void run() {
+
         try {
             in = new DataInputStream(this.socket.getInputStream());
             out = new DataOutputStream(this.socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d("get", "run: runFlag = false");
             runFlag = false;
         }
         while (runFlag) {
-            try {
-                final String s = in.readUTF();
-                this.onReceive(addr, s);
-            } catch (IOException e) {
-                // 连接被断开(被动)
+            final String s = getContent();
+            if (s == null) {
                 runFlag = false;
+            } else {
+                this.onReceive(addr, s);
             }
         }
         // 断开连接
@@ -113,8 +122,20 @@ public abstract class SocketTransceiver implements Runnable {
         this.onDisconnect(addr);
     }
 
+    // 判断流是否停止发送了
+    private String getContent() {
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            // 连接被断开(被动)
+            runFlag = false;
+        }
+        return null;
+    }
+
     /**
      * 接收到数据
+     * <p>
      * 注意：此回调是在新线程中执行的
      *
      * @param addr 连接到的Socket地址
@@ -124,6 +145,7 @@ public abstract class SocketTransceiver implements Runnable {
 
     /**
      * 连接断开
+     * <p>
      * 注意：此回调是在新线程中执行的
      *
      * @param addr 连接到的Socket地址
