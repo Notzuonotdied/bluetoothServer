@@ -10,8 +10,8 @@ import java.net.Socket;
 
 /**
  * Created by wangyu on 17-7-19.
+ * 这是ＴＣＰ的抽象类
  */
-
 public abstract class SocketTransceiver implements Runnable {
     protected Socket socket;
     protected InetAddress addr;

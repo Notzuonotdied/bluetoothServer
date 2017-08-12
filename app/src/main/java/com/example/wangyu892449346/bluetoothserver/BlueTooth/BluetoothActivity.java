@@ -118,9 +118,7 @@ public class BluetoothActivity extends GPSActivity implements BluetoothReceiver.
             }
             unregisterReceiver(bluetoothReceiver);
             this.finish();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

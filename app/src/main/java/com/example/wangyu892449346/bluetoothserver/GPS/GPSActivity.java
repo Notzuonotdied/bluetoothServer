@@ -165,7 +165,6 @@ public class GPSActivity extends AppCompatActivity implements OnPermissionCallba
                 (GPSActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             mPermissionHelper.request(MULTI_PERMISSIONS);
-            return;
         }
     }
 

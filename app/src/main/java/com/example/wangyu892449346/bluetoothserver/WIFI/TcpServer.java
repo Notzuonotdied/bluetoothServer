@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by wangyu on 17-7-19.
+ * TCP服务
  */
 
 public abstract class TcpServer implements Runnable {
@@ -86,7 +87,7 @@ public abstract class TcpServer implements Runnable {
     /**
      * 启动客户端收发
      *
-     * @param socket
+     * @param socket 套接字
      */
     private void startClient(final Socket socket) {
         SocketTransceiver client = new SocketTransceiver(socket) {

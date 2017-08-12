@@ -26,20 +26,16 @@ public class SettingActivity extends AppCompatActivity {
     private android.widget.EditText edityaw;
     private android.widget.Button btnAlert;
     private android.widget.Button btnConfirm;
-    private View.OnClickListener listener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.alert:
-                    setFlag(true);
-                    readData();
-                    break;
-                case R.id.confirm:
-                    setFlag(false);
-                    saveData();
-                    break;
-            }
+    private View.OnClickListener listener = view -> {
+        switch (view.getId()) {
+            case R.id.alert:
+                setFlag(true);
+                readData();
+                break;
+            case R.id.confirm:
+                setFlag(false);
+                saveData();
+                break;
         }
     };
 

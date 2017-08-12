@@ -38,6 +38,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.List;
 
+@SuppressWarnings("ALL")// 用于抑制编译器产生警告信息。
 public class MainActivity extends BluetoothActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -137,55 +138,44 @@ public class MainActivity extends BluetoothActivity
 
             @Override
             public void onConnect(SocketTransceiver client) {
-                Message message = Message.obtain();
-                message.what = 1;
-                message.obj = "Client " + client.getInetAddress().getHostAddress() + " connect.";
-                myHandler.sendMessage(message);
+                sendMsg(1, "Client " + client.getInetAddress().getHostAddress() + " connect.");
             }
 
             @Override
             public void onConnectFailed() {
-                Message message = Message.obtain();
-                message.what = 1;
-                message.obj = "Client Connect Failed.";
-                myHandler.sendMessage(message);
+                sendMsg(1, "Client Connect Failed.");
             }
 
             @Override
             public void onReceive(SocketTransceiver client, String s) {
-                Message message = Message.obtain();
-                message.what = 2;
-                message.obj = s;
-                myHandler.sendMessage(message);
+                sendMsg(2, s);
                 // client.send(s);
                 // Log.i("get", s);
             }
 
             @Override
             public void onDisconnect(SocketTransceiver client) {
-                Message message = Message.obtain();
-                message.what = 1;
-                message.obj = "Client " + client.getInetAddress().getHostAddress() + " disconnect.";
-                myHandler.sendMessage(message);
+                sendMsg(1, "Client " + client.getInetAddress().getHostAddress() + " disconnect.");
             }
 
             @Override
             public void onServerStop() {
-                Message message = Message.obtain();
-                message.what = 1;
-                message.obj = "TCP server stop.";
-                myHandler.sendMessage(message);
+                sendMsg(1, "TCP server stop.");
             }
         };
-        Message message = Message.obtain();
-        message.what = 1;
-        message.obj = "TCP server start.";
-        myHandler.sendMessage(message);
+        sendMsg(1, "TCP server start.");
         server.start();
     }
 
     private void startClient() {
 
+    }
+
+    public void sendMsg(int what, String obj) {
+        Message message = Message.obtain();
+        message.what = what;
+        message.obj = obj;
+        myHandler.sendMessage(message);
     }
 
     @Override
@@ -457,7 +447,7 @@ public class MainActivity extends BluetoothActivity
         private final WeakReference<MainActivity> mActivity;
 
         MyHandler(MainActivity activity) {
-            mActivity = new WeakReference<MainActivity>(activity);
+            mActivity = new WeakReference<>(activity);
         }
 
         @Override

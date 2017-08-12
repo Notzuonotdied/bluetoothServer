@@ -20,10 +20,10 @@ import java.lang.ref.WeakReference;
  */
 class GPSLocationManager {
     private static final String GPS_LOCATION_NAME = android.location.LocationManager.GPS_PROVIDER;
-    private static GPSLocationManager gpsLocationManager;
     private final static Object objLock = new Object();
-    private boolean isGpsEnabled;
+    private static GPSLocationManager gpsLocationManager;
     private static String mLocateType;
+    private boolean isGpsEnabled;
     private WeakReference<Activity> mContext;
     /**
      * 描述地理位置信息的类，记录了经纬度、海拔高度、获取坐标时间、速度、方位等。
@@ -31,7 +31,7 @@ class GPSLocationManager {
      * provider就是上文中提到的GPS_PROVIDER、NETWORK_PROVIDER、PASSIVE_PROVIDER、FUSED_PROVIDER；
      * 不过很多时候得到的Location对象为null；
      * 实时动态坐标可以在监听器locationListener的onLocationChanged(Location location)方法中来获取。
-     * */
+     */
     private LocationManager locationManager;
     private GPSLocation mGPSLocation;
     private boolean isOPenGps;
@@ -40,21 +40,6 @@ class GPSLocationManager {
 
     private GPSLocationManager(Activity context) {
         initData(context);
-    }
-
-    private void initData(Activity context) {
-        this.mContext = new WeakReference<>(context);
-        if (mContext.get() != null) {
-            locationManager = (LocationManager) (mContext.get().getSystemService(Context.LOCATION_SERVICE));
-        }
-        //定位类型：GPS
-        mLocateType = LocationManager.GPS_PROVIDER;
-        //默认不强制打开GPS设置面板
-        isOPenGps = false;
-        //默认定位时间间隔为1000ms
-        mMinTime = 100;
-        //默认位置可更新的最短距离为0m
-        mMinDistance = 0;
     }
 
     /**
@@ -72,6 +57,21 @@ class GPSLocationManager {
             }
         }
         return gpsLocationManager;
+    }
+
+    private void initData(Activity context) {
+        this.mContext = new WeakReference<>(context);
+        if (mContext.get() != null) {
+            locationManager = (LocationManager) (mContext.get().getSystemService(Context.LOCATION_SERVICE));
+        }
+        //定位类型：GPS
+        mLocateType = LocationManager.GPS_PROVIDER;
+        //默认不强制打开GPS设置面板
+        isOPenGps = false;
+        //默认定位时间间隔为1000ms
+        mMinTime = 100;
+        //默认位置可更新的最短距离为0m
+        mMinDistance = 0;
     }
 
     /**

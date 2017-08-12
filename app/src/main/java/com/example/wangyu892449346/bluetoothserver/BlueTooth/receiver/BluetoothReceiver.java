@@ -4,8 +4,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.example.wangyu892449346.bluetoothserver.BlueTooth.ClsUtils;
@@ -17,6 +15,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
     private final static String DeviceName = "HC-05";// 蓝牙设备名称
 
     private BRInteraction brInteraction;
+
     /**
      * 广播接收器，当远程蓝牙设备被发现时，回调函数onReceiver()会被执行
      */
@@ -68,11 +67,11 @@ public class BluetoothReceiver extends BroadcastReceiver {
         }
     }
 
-    public interface BRInteraction {
-        void OnFoundTargetDevice(String targetDeviceAdr);
-    }
-
     public void setBRInteractionListener(BRInteraction brInteraction) {
         this.brInteraction = brInteraction;
+    }
+
+    public interface BRInteraction {
+        void OnFoundTargetDevice(String targetDeviceAdr);
     }
 }

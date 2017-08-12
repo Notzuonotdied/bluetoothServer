@@ -27,25 +27,17 @@ public class ClsUtils {
     static public boolean removeBond(Class<?> btClass, BluetoothDevice btDevice)
             throws Exception {
         Method removeBondMethod = btClass.getMethod("removeBond");
-        Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice);
-        return returnValue.booleanValue();
+        return (Boolean) removeBondMethod.invoke(btDevice);
     }
 
     static public boolean setPin(Class<? extends BluetoothDevice> btClass, BluetoothDevice btDevice,
                                  String str) throws Exception {
         try {
-            Method removeBondMethod = btClass.getDeclaredMethod("setPin",
-                    new Class[]{byte[].class});
+            Method removeBondMethod = btClass.getDeclaredMethod("setPin", byte[].class);
             Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice,
                     new Object[]
                             {str.getBytes()});
             Log.e("returnValue", "" + returnValue);
-        } catch (SecurityException e) {
-            // throw new RuntimeException(e.getMessage());
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            // throw new RuntimeException(e.getMessage());
-            e.printStackTrace();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -56,31 +48,30 @@ public class ClsUtils {
 
     /**
      * 取消用户输入
-     * */
+     */
     static public boolean cancelPairingUserInput(Class<?> btClass,
                                                  BluetoothDevice device) throws Exception {
-        Method createBondMethod
-                = btClass.getMethod("cancelPairingUserInput");
-        Boolean returnValue = (Boolean) createBondMethod.invoke(device);
-        return returnValue.booleanValue();
+        Method createBondMethod = btClass.getMethod("cancelPairingUserInput");
+        return (Boolean) createBondMethod.invoke(device);
     }
 
     /**
      * 取消配对
-     * */
-    static public boolean cancelBondProcess(Class<?> btClass,
-                                            BluetoothDevice device)
-
-            throws Exception {
+     */
+    static public boolean cancelBondProcess(
+            Class<?> btClass,
+            BluetoothDevice device) throws Exception {
         Method createBondMethod = btClass.getMethod("cancelBondProcess");
-        Boolean returnValue = (Boolean) createBondMethod.invoke(device);
-        return returnValue.booleanValue();
+        return (Boolean) createBondMethod.invoke(device);
     }
 
     /**
      * 确认配对
-     * */
-    static public void setPairingConfirmation(Class<?> btClass, BluetoothDevice device, boolean isConfirm) throws Exception {
+     */
+    static public void setPairingConfirmation(
+            Class<?> btClass,
+            BluetoothDevice device,
+            boolean isConfirm) throws Exception {
         Method setPairingConfirmation = btClass.getDeclaredMethod("setPairingConfirmation", boolean.class);
         setPairingConfirmation.invoke(device, isConfirm);
     }
@@ -88,6 +79,7 @@ public class ClsUtils {
 
     /**
      * 显示所有信息
+     *
      * @param clsShow 类名
      */
     static public void printAllInform(Class clsShow) {
@@ -96,20 +88,13 @@ public class ClsUtils {
             Method[] hideMethod = clsShow.getMethods();
             int i = 0;
             for (; i < hideMethod.length; i++) {
-                Log.e("method name", hideMethod[i].getName() + ";and the i is:"
-                        + i);
+                Log.e("method name", hideMethod[i].getName() + ";and the i is:" + i);
             }
             // 取得所有常量
             Field[] allFields = clsShow.getFields();
             for (i = 0; i < allFields.length; i++) {
                 Log.e("Field name", allFields[i].getName());
             }
-        } catch (SecurityException e) {
-            // throw new RuntimeException(e.getMessage());
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            // throw new RuntimeException(e.getMessage());
-            e.printStackTrace();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
