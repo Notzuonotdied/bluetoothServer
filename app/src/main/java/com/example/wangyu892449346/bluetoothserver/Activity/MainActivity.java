@@ -1,8 +1,11 @@
 package com.example.wangyu892449346.bluetoothserver.Activity;
 
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -67,6 +70,9 @@ public class MainActivity extends BluetoothActivity
     private Button server_confirm;
     private android.support.v7.widget.AppCompatTextView serverIP;
     private MyHandler myHandler;
+    private Vibrator vibrator;
+    private SoundPool soundPool;
+    private int hit;
 
     private GPSListener gpsListener = new GPSListener() {
         @Override// 当获取到经度的时候回调
@@ -249,6 +255,11 @@ public class MainActivity extends BluetoothActivity
         serverIP.setText(temp);
 
         myHandler = new MyHandler(this);
+
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 100);
+        hit = soundPool.load(this, R.raw.sound, 1);
     }
 
     @Override
@@ -358,6 +369,7 @@ public class MainActivity extends BluetoothActivity
     private void setNavTextStatus(int angle, TextView tv) {
         if (dataUtil.isNavOverStep(angle)) {
             tv.setBackgroundColor(this.getResources().getColor(R.color.colorAccent));
+            playSound();
         } else {
             tv.setBackgroundColor(this.getResources().getColor(R.color.white));
         }
@@ -373,6 +385,7 @@ public class MainActivity extends BluetoothActivity
     private void setGasTextStatus(double gas, TextView tv) {
         if (dataUtil.isOverEdge(gas)) {
             tv.setBackgroundColor(this.getResources().getColor(R.color.colorAccent));
+            playSound();
         } else {
             tv.setBackgroundColor(this.getResources().getColor(R.color.white));
         }
@@ -388,6 +401,7 @@ public class MainActivity extends BluetoothActivity
     private void setPitchTextStatus(int angle, TextView tv) {
         if (dataUtil.isPitchOverStep(angle)) {
             tv.setBackgroundColor(this.getResources().getColor(R.color.colorAccent));
+            playSound();
         } else {
             tv.setBackgroundColor(this.getResources().getColor(R.color.white));
         }
@@ -403,10 +417,19 @@ public class MainActivity extends BluetoothActivity
     private void setYawTextStatus(int angle, TextView tv) {
         if (dataUtil.isYawOverStep(angle)) {
             tv.setBackgroundColor(this.getResources().getColor(R.color.colorAccent));
+            playSound();
         } else {
             tv.setBackgroundColor(this.getResources().getColor(R.color.white));
         }
         tv.setText(String.valueOf(angle));
+    }
+
+    private void playSound() {
+        if (hit == 0) {
+            hit = soundPool.load(this, R.raw.sound, 0);
+        }
+        soundPool.play(hit, 9, 9, 0, 5, (float)1);
+        vibrator.vibrate(new long[]{100,2000,500,2500},-1);
     }
 
     /**
@@ -465,6 +488,24 @@ public class MainActivity extends BluetoothActivity
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        soundPool.release();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        soundPool.resume(R.raw.sound);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        soundPool.stop(R.raw.sound);
     }
 }
 

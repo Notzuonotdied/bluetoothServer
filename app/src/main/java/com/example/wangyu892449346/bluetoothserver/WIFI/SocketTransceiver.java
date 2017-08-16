@@ -15,8 +15,8 @@ import java.net.Socket;
 public abstract class SocketTransceiver implements Runnable {
     protected Socket socket;
     protected InetAddress addr;
-    protected DataInputStream in;
-    protected DataOutputStream out;
+    protected DataInputStream in;// 数据读取
+    protected DataOutputStream out;// 数据写入
     private boolean runFlag;
 
     /**
