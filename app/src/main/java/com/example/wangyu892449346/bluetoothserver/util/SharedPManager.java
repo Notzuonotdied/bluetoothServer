@@ -33,6 +33,16 @@ public class SharedPManager {
      * @param key      键值
      * @param defValue 假如没有找到，就返回defValue
      */
+    public float getFloat(String key, float defValue) {
+        return Sp.getFloat(key, defValue);
+    }
+
+    /**
+     * 获取Key的String数据
+     *
+     * @param key      键值
+     * @param defValue 假如没有找到，就返回defValue
+     */
     public int getInt(String key, int defValue) {
         return Sp.getInt(key, defValue);
     }
@@ -52,6 +62,16 @@ public class SharedPManager {
      */
     public void clear() {
         SpEditor.clear();
+    }
+
+    /**
+     * 向SharePreferences存入指定key对应的数据
+     *
+     * @param key   键值
+     * @param value 键值对应的数据
+     */
+    public void putFloat(String key, float value) {
+        SpEditor.putFloat(key, value);
     }
 
     /**

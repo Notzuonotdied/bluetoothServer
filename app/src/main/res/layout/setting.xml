@@ -32,8 +32,8 @@
         <Button
             android:id="@+id/alert"
             android:layout_width="wrap_content"
-            android:layout_margin="6dp"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:background="@drawable/shape"
             android:text="@string/alert"
             android:textColor="@color/white"
@@ -42,8 +42,8 @@
         <Button
             android:id="@+id/confirm"
             android:layout_width="wrap_content"
-            android:layout_margin="6dp"
             android:layout_height="wrap_content"
+            android:layout_margin="6dp"
             android:background="@drawable/shape"
             android:text="@string/confirm"
             android:textColor="@color/white"
@@ -70,7 +70,7 @@
 
         <EditText
             android:id="@+id/edit12"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <LinearLayout style="@style/setting_LinearLayout">
@@ -81,7 +81,7 @@
 
         <EditText
             android:id="@+id/edit23"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <LinearLayout style="@style/setting_LinearLayout">
@@ -92,7 +92,7 @@
 
         <EditText
             android:id="@+id/edit34"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <LinearLayout style="@style/setting_LinearLayout">
@@ -103,7 +103,7 @@
 
         <EditText
             android:id="@+id/edit45"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <LinearLayout style="@style/setting_LinearLayout">
@@ -114,7 +114,7 @@
 
         <EditText
             android:id="@+id/edit56"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <LinearLayout style="@style/setting_LinearLayout">
@@ -125,7 +125,7 @@
 
         <EditText
             android:id="@+id/edit67"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <LinearLayout style="@style/setting_LinearLayout">
@@ -136,7 +136,7 @@
 
         <EditText
             android:id="@+id/edit78"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <LinearLayout style="@style/setting_LinearLayout">
@@ -147,7 +147,7 @@
 
         <EditText
             android:id="@+id/edit89"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <android.support.v4.widget.Space
@@ -166,7 +166,7 @@
 
         <EditText
             android:id="@+id/edit_roll"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <android.support.v4.widget.Space
@@ -185,7 +185,26 @@
 
         <EditText
             android:id="@+id/edit_yaw"
-            style="@style/setting_EditText" />
+            style="@style/setting_EditText"/>
+    </LinearLayout>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+    <TextView
+        style="@style/setting_title"
+        android:text="@string/gas" />
+
+    <LinearLayout style="@style/setting_LinearLayout">
+
+        <TextView
+            style="@style/setting_item"
+            android:text="@string/gas_info" />
+
+        <EditText
+            android:id="@+id/edit_gas"
+            style="@style/setting_EditText"/>
     </LinearLayout>
 
     <android.support.v4.widget.Space

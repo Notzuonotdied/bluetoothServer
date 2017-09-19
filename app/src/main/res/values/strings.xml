@@ -8,6 +8,7 @@
     <string name="nav">——————导航角系数设置——————</string>
     <string name="roll">——————俯仰角系数设置——————</string>
     <string name="yaw">——————倾斜角系数设置——————</string>
+    <string name="gas">——————可燃气体浓度设置——————</string>
     <string name="nav_12">10°～20°的上下界绝对值：</string>
     <string name="nav_23">20°～30°的上下界绝对值：</string>
     <string name="nav_34">30°～40°的上下界绝对值：</string>
@@ -18,6 +19,7 @@
     <string name="nav_89">80°～90°的上下界绝对值：</string>
     <string name="roll_ud">俯仰角上下界绝对值</string>
     <string name="yaw_ud">倾斜角上下界绝对值</string>
+    <string name="gas_info">可燃气体浓度报警值</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

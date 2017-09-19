@@ -39,7 +39,7 @@ public class DataUtil {
     }
 
     public boolean isOverEdge(double gas) {
-        return gas > 0.3 || gas < 0.1;
+        return gas > Constant.editGasNum;
     }
 
     public boolean isNavOverStep(int angle) {

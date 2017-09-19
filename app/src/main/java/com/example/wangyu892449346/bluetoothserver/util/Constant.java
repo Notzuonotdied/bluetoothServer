@@ -16,6 +16,7 @@ public class Constant {
     public static String edit89 = "edit89";
     public static String editPitch = "editPitch";
     public static String editYaw = "editYaw";
+    public static String editGas = "editGas";
 
     public static int edit12Num = 15;
     public static int edit23Num = 15;
@@ -27,6 +28,8 @@ public class Constant {
     public static int edit89Num = 15;
     public static int editPitchNum = 45;
     public static int editYawNum = 30;
+
+    public static double editGasNum = 0.3;
 
     public static int speed = 0;
 }

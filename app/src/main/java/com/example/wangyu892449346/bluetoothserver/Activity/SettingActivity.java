@@ -14,6 +14,7 @@ import com.example.wangyu892449346.bluetoothserver.util.SharedPManager;
 
 public class SettingActivity extends AppCompatActivity {
 
+    private android.widget.EditText editGas;
     private android.widget.EditText edit12;
     private android.widget.EditText edit23;
     private android.widget.EditText edit34;
@@ -23,7 +24,7 @@ public class SettingActivity extends AppCompatActivity {
     private android.widget.EditText edit78;
     private android.widget.EditText edit89;
     private android.widget.EditText editPitch;
-    private android.widget.EditText edityaw;
+    private android.widget.EditText editYaw;
     private android.widget.Button btnAlert;
     private android.widget.Button btnConfirm;
     private View.OnClickListener listener = view -> {
@@ -55,7 +56,8 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        this.edityaw = (EditText) findViewById(R.id.edit_yaw);
+        this.editGas = (EditText) findViewById(R.id.edit_gas);
+        this.editYaw = (EditText) findViewById(R.id.edit_yaw);
         this.editPitch = (EditText) findViewById(R.id.edit_roll);
         this.edit89 = (EditText) findViewById(R.id.edit89);
         this.edit78 = (EditText) findViewById(R.id.edit78);
@@ -81,6 +83,7 @@ public class SettingActivity extends AppCompatActivity {
         Constant.edit67Num = sp.getInt(Constant.edit67, Constant.edit67Num);
         Constant.editPitchNum = sp.getInt(Constant.editPitch, Constant.editPitchNum);
         Constant.editYawNum = sp.getInt(Constant.editYaw, Constant.editYawNum);
+        Constant.editGasNum = sp.getFloat(Constant.editGas, (float) Constant.editGasNum);
 
         this.edit12.setText(int2String(Constant.edit12Num));
         this.edit23.setText(int2String(Constant.edit23Num));
@@ -90,8 +93,9 @@ public class SettingActivity extends AppCompatActivity {
         this.edit67.setText(int2String(Constant.edit67Num));
         this.edit78.setText(int2String(Constant.edit78Num));
         this.edit89.setText(int2String(Constant.edit89Num));
-        this.edityaw.setText(int2String(Constant.editYawNum));
+        this.editYaw.setText(int2String(Constant.editYawNum));
         this.editPitch.setText(int2String(Constant.editPitchNum));
+        this.editGas.setText(String.valueOf(Constant.editGasNum));
         sp.commit();
     }
 
@@ -106,7 +110,8 @@ public class SettingActivity extends AppCompatActivity {
         Constant.edit78Num = String2Int(edit78.getText().toString());
         Constant.edit89Num = String2Int(edit89.getText().toString());
         Constant.editPitchNum = String2Int(editPitch.getText().toString());
-        Constant.editYawNum = String2Int(edityaw.getText().toString());
+        Constant.editYawNum = String2Int(editYaw.getText().toString());
+        Constant.editGasNum = Float.valueOf(editGas.getText().toString());
 
         sp.putInt(Constant.edit12, Constant.edit12Num);
         sp.putInt(Constant.edit23, Constant.edit23Num);
@@ -117,6 +122,7 @@ public class SettingActivity extends AppCompatActivity {
         sp.putInt(Constant.edit89, Constant.edit89Num);
         sp.putInt(Constant.editPitch, Constant.editPitchNum);
         sp.putInt(Constant.editYaw, Constant.editYawNum);
+        sp.putFloat(Constant.editGas, (float) Constant.editGasNum);
         sp.commit();
     }
 
@@ -130,7 +136,8 @@ public class SettingActivity extends AppCompatActivity {
         this.edit23.setEnabled(flag);
         this.edit12.setEnabled(flag);
         this.editPitch.setEnabled(flag);
-        this.edityaw.setEnabled(flag);
+        this.editYaw.setEnabled(flag);
+        this.editGas.setEnabled(flag);
     }
 
     private int String2Int(String str) {

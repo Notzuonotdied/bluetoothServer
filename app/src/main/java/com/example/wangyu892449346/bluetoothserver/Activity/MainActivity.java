@@ -428,8 +428,8 @@ public class MainActivity extends BluetoothActivity
         if (hit == 0) {
             hit = soundPool.load(this, R.raw.sound, 0);
         }
-        soundPool.play(hit, 9, 9, 0, 5, (float)1);
-        vibrator.vibrate(new long[]{100,2000,500,2500},-1);
+        soundPool.play(hit, 9, 9, 0, 5, (float) 1);
+        vibrator.vibrate(new long[]{100, 2000, 500, 2500}, -1);
     }
 
     /**
@@ -466,6 +466,24 @@ public class MainActivity extends BluetoothActivity
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        soundPool.release();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        soundPool.resume(R.raw.sound);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        soundPool.stop(R.raw.sound);
+    }
+
     private class MyHandler extends android.os.Handler {
         private final WeakReference<MainActivity> mActivity;
 
@@ -488,24 +506,6 @@ public class MainActivity extends BluetoothActivity
                     break;
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        soundPool.release();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        soundPool.resume(R.raw.sound);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        soundPool.stop(R.raw.sound);
     }
 }
 
