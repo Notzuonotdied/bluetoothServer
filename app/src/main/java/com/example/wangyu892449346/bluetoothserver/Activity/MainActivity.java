@@ -300,6 +300,7 @@ public class MainActivity extends BluetoothActivity
                 disConnect();//中断连接
                 break;
             case R.id.gps:
+                showToast("GPS");
                 this.startGPS();
                 break;
             case R.id.TcpClient:

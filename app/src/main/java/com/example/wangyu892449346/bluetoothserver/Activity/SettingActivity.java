@@ -95,7 +95,7 @@ public class SettingActivity extends AppCompatActivity {
         this.edit89.setText(int2String(Constant.edit89Num));
         this.editYaw.setText(int2String(Constant.editYawNum));
         this.editPitch.setText(int2String(Constant.editPitchNum));
-        this.editGas.setText(String.valueOf(Constant.editGasNum));
+        this.editGas.setText(String.valueOf((float) Constant.editGasNum));
         sp.commit();
     }
 
